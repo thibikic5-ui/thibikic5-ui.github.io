@@ -2,12 +2,13 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
+
   <meta
     name="viewport"
     content="width=device-width, initial-scale=1.0, viewport-fit=cover"
   />
 
-  <meta name="theme-color" content="#fff8f5" />
+  <meta name="theme-color" content="#fff9f6" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
 
@@ -21,6 +22,18 @@
   />
 
   <style>
+    :root {
+      --bg: #fffaf7;
+      --card: #ffffff;
+      --text: #514945;
+      --sub: #a39a95;
+      --line: #eee4df;
+      --accent: #d4937a;
+      --accent-light: #f9eee9;
+      --green: #829b89;
+      --shadow: 0 7px 24px rgba(80, 60, 50, 0.055);
+    }
+
     * {
       box-sizing: border-box;
     }
@@ -29,8 +42,10 @@
     body {
       margin: 0;
       padding: 0;
-      width: 100%;
       min-height: 100%;
+      background: var(--bg);
+      color: var(--text);
+
       font-family:
         -apple-system,
         BlinkMacSystemFont,
@@ -39,12 +54,10 @@
         "Yu Gothic",
         "Meiryo",
         sans-serif;
-      background: #fffaf7;
-      color: #4b4542;
     }
 
     body {
-      padding-bottom: 82px;
+      padding-bottom: calc(82px + env(safe-area-inset-bottom));
     }
 
     button,
@@ -55,9 +68,12 @@
     }
 
     button {
-      cursor: pointer;
       -webkit-tap-highlight-color: transparent;
     }
+
+    /* =====================================
+       APP
+    ===================================== */
 
     .app {
       width: 100%;
@@ -65,23 +81,30 @@
       margin: 0 auto;
     }
 
-    /* =========================
-       Header
-    ========================= */
+    /* =====================================
+       HEADER
+    ===================================== */
 
     .header {
       position: sticky;
       top: 0;
       z-index: 1000;
+
       background: rgba(255, 250, 247, 0.94);
-      backdrop-filter: blur(14px);
-      border-bottom: 1px solid #f0e6e0;
+      backdrop-filter: blur(16px);
+
+      border-bottom: 1px solid rgba(238, 228, 223, 0.8);
     }
 
     .header-inner {
       max-width: 760px;
       margin: 0 auto;
-      padding: 16px 18px 14px;
+
+      padding:
+        15px
+        18px
+        13px;
+
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -89,35 +112,43 @@
 
     .app-title {
       margin: 0;
-      font-size: 21px;
+
+      font-size: 20px;
       font-weight: 700;
-      letter-spacing: 0.03em;
-      color: #514945;
+      letter-spacing: 0.035em;
     }
 
     .header-subtitle {
       margin-top: 3px;
-      font-size: 11px;
-      color: #a29a95;
+
+      font-size: 10px;
+      color: var(--sub);
+
+      letter-spacing: 0.08em;
     }
 
     .header-icon {
-      width: 42px;
-      height: 42px;
-      border: none;
+      width: 40px;
+      height: 40px;
+
+      border: 1px solid var(--line);
       border-radius: 50%;
+
       background: #fff;
-      box-shadow: 0 4px 16px rgba(70, 50, 40, 0.08);
-      font-size: 19px;
+
+      color: #796f69;
+      font-size: 17px;
+
+      box-shadow: 0 4px 14px rgba(70, 50, 40, 0.06);
     }
 
-    /* =========================
-       Screen
-    ========================= */
+    /* =====================================
+       SCREEN
+    ===================================== */
 
     .screen {
       display: none;
-      padding: 18px;
+      padding: 17px;
     }
 
     .screen.active {
@@ -125,60 +156,68 @@
     }
 
     .page-title {
-      margin: 4px 0 18px;
-      font-size: 25px;
+      margin: 4px 0 17px;
+
+      font-size: 24px;
       font-weight: 700;
-      color: #514945;
+
+      letter-spacing: 0.01em;
     }
 
-    .page-description {
-      margin: -10px 0 18px;
-      font-size: 13px;
-      line-height: 1.7;
-      color: #9b928d;
-    }
-
-    /* =========================
-       Search
-    ========================= */
+    /* =====================================
+       SEARCH
+    ===================================== */
 
     .search-box {
       display: flex;
       gap: 8px;
+
       margin-bottom: 12px;
     }
 
     .search-input {
       flex: 1;
       min-width: 0;
-      height: 46px;
+
+      height: 45px;
+
       padding: 0 15px;
-      border: 1px solid #eadfd9;
-      border-radius: 14px;
+
+      border: 1px solid var(--line);
+      border-radius: 15px;
+
       background: #fff;
-      color: #514945;
+
+      color: var(--text);
       outline: none;
+
+      box-shadow: 0 3px 13px rgba(80, 60, 50, 0.025);
     }
 
     .search-input:focus {
-      border-color: #d8b9aa;
+      border-color: #dcbcae;
     }
 
     .filter-button {
-      width: 46px;
-      height: 46px;
-      border: 1px solid #eadfd9;
-      border-radius: 14px;
+      width: 45px;
+      height: 45px;
+
+      border: 1px solid var(--line);
+      border-radius: 15px;
+
       background: #fff;
-      color: #716863;
+      color: #81766f;
     }
 
     .filters {
       display: none;
-      padding: 14px;
-      margin-bottom: 14px;
-      border: 1px solid #eee3de;
+
+      padding: 13px;
+      margin-bottom: 13px;
+
+      border: 1px solid var(--line);
       border-radius: 16px;
+
       background: #fff;
     }
 
@@ -189,12 +228,12 @@
     .filter-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 10px;
+      gap: 9px;
     }
 
-    /* =========================
-       Cards
-    ========================= */
+    /* =====================================
+       MEMORY CARD
+    ===================================== */
 
     .memory-list {
       display: flex;
@@ -203,12 +242,14 @@
     }
 
     .memory-card {
-      position: relative;
       overflow: hidden;
-      border: 1px solid #eee3de;
-      border-radius: 19px;
-      background: #fff;
-      box-shadow: 0 5px 20px rgba(74, 54, 45, 0.055);
+
+      border: 1px solid var(--line);
+      border-radius: 20px;
+
+      background: var(--card);
+
+      box-shadow: var(--shadow);
     }
 
     .memory-card-main {
@@ -223,16 +264,23 @@
 
     .memory-card-date {
       flex: 0 0 auto;
-      max-width: 94px;
-      padding: 6px 9px;
+
+      width: 76px;
+      min-width: 76px;
+
+      padding: 6px 7px;
+
       border-radius: 9px;
-      background: #f8eeea;
-      color: #9b7160;
-      font-size: 11px;
-      line-height: 1.35;
-      white-space: normal;
+
+      background: var(--accent-light);
+      color: #a27362;
+
+      font-size: 10px;
+      line-height: 1.4;
+
+      text-align: center;
+
       overflow-wrap: anywhere;
-      word-break: break-word;
     }
 
     .memory-place-wrap {
@@ -242,37 +290,45 @@
 
     .memory-place {
       margin: 0;
+
       font-size: 17px;
       font-weight: 700;
-      color: #514945;
       line-height: 1.4;
+
       word-break: break-word;
     }
 
     .memory-genre {
-      margin-top: 3px;
-      font-size: 11px;
-      color: #aaa19c;
+      margin-top: 2px;
+
+      font-size: 10px;
+      color: var(--sub);
     }
 
     .rating {
-      margin-top: 9px;
-      font-size: 13px;
-      color: #d18c6e;
-      letter-spacing: 0.04em;
+      margin-top: 8px;
+
+      color: #d39478;
+
+      letter-spacing: 0.02em;
     }
 
     .rating-number {
-      margin-left: 4px;
-      font-size: 12px;
-      color: #9d918a;
+      margin-left: 5px;
+
+      color: #9b908a;
+      font-size: 11px;
+      letter-spacing: 0;
     }
 
     .memory-comment {
-      margin: 11px 0 0;
+      margin-top: 11px;
+
       font-size: 13px;
-      line-height: 1.7;
-      color: #756d68;
+      line-height: 1.75;
+
+      color: #746b66;
+
       white-space: pre-wrap;
       word-break: break-word;
     }
@@ -280,109 +336,158 @@
     .memory-meta {
       display: flex;
       flex-wrap: wrap;
-      gap: 6px;
+
+      gap: 5px;
+
       margin-top: 11px;
     }
 
     .meta-chip {
       padding: 5px 8px;
+
       border-radius: 999px;
+
       background: #f8f5f3;
+
       color: #918680;
+
       font-size: 10px;
     }
 
     .memory-card-photo {
-      width: 100%;
-      height: 190px;
-      object-fit: cover;
       display: block;
-      background: #f3efed;
+
+      width: 100%;
+      height: 185px;
+
+      object-fit: cover;
+
+      background: #f2ece9;
     }
 
     .card-actions {
-      display: flex;
-      border-top: 1px solid #f0e8e4;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+
+      border-top: 1px solid #f0e7e3;
     }
 
     .card-action {
-      flex: 1;
-      height: 44px;
+      height: 43px;
+
       border: none;
+
       background: #fff;
+
       color: #81766f;
-      font-size: 12px;
+
+      font-size: 11px;
     }
 
     .card-action + .card-action {
-      border-left: 1px solid #f0e8e4;
+      border-left: 1px solid #f0e7e3;
     }
 
-    /* =========================
-       Empty
-    ========================= */
+    /* =====================================
+       EMPTY
+    ===================================== */
 
     .empty {
       padding: 55px 20px;
+
       text-align: center;
-      color: #aaa19c;
+      color: var(--sub);
     }
 
     .empty-icon {
-      font-size: 35px;
       margin-bottom: 12px;
+
+      font-size: 34px;
+      color: #d9a18c;
     }
 
     .empty-title {
+      margin-bottom: 5px;
+
+      color: #756b66;
+      font-size: 14px;
       font-weight: 700;
-      color: #756d68;
-      margin-bottom: 6px;
     }
 
     .empty-text {
-      font-size: 12px;
+      font-size: 11px;
       line-height: 1.7;
     }
 
-    /* =========================
-       Form
-    ========================= */
+    /* =====================================
+       FORM
+    ===================================== */
 
     .form-card {
       padding: 17px;
-      border: 1px solid #eee3de;
-      border-radius: 19px;
+
+      border: 1px solid var(--line);
+      border-radius: 21px;
+
       background: #fff;
-      box-shadow: 0 5px 20px rgba(74, 54, 45, 0.045);
+
+      box-shadow: var(--shadow);
     }
 
     .form-group {
-      margin-bottom: 18px;
+      margin-bottom: 19px;
     }
 
     .form-label {
       display: block;
+
       margin-bottom: 7px;
-      font-size: 12px;
+
+      font-size: 11px;
       font-weight: 700;
-      color: #756d68;
+
+      color: #766c66;
+
+      letter-spacing: 0.04em;
     }
 
     .required {
-      color: #d48c78;
       margin-left: 3px;
+      color: #d4937a;
     }
 
     .input,
     .textarea,
     .select {
       width: 100%;
-      border: 1px solid #e9ded8;
+
+      border: 1px solid #e9ded9;
       border-radius: 12px;
-      background: #fffdfa;
-      padding: 12px;
-      color: #514945;
+
+      background: #fffdfb;
+
+      color: var(--text);
+
       outline: none;
+    }
+
+    .input {
+      height: 45px;
+      padding: 0 12px;
+    }
+
+    .textarea {
+      min-height: 105px;
+      padding: 12px;
+
+      resize: vertical;
+
+      line-height: 1.7;
+    }
+
+    .select {
+      height: 45px;
+      padding: 0 11px;
     }
 
     .input:focus,
@@ -392,198 +497,320 @@
       background: #fff;
     }
 
-    .textarea {
-      min-height: 105px;
-      resize: vertical;
-      line-height: 1.7;
+    /* =====================================
+       DATE
+    ===================================== */
+
+    .date-input {
+      max-width: 185px;
     }
 
-    .two-column {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
+    /* =====================================
+       STAR RATING
+    ===================================== */
+
+    .star-rating {
+      display: flex;
+      align-items: center;
+      gap: 1px;
+
+      padding: 3px 0;
     }
 
-    /* =========================
-       Rating
-    ========================= */
+    .star-button {
+      width: 31px;
+      height: 36px;
 
-    .rating-selector {
-      display: grid;
-      grid-template-columns: repeat(10, 1fr);
-      gap: 5px;
+      padding: 0;
+
+      border: none;
+
+      background: transparent;
+
+      color: #ded3cd;
+
+      font-size: 25px;
+      line-height: 1;
     }
 
-    .rating-option {
-      height: 38px;
-      border: 1px solid #e8ddd7;
-      border-radius: 9px;
-      background: #fff;
-      color: #938881;
+    .star-button.selected {
+      color: #d4937a;
+    }
+
+    .rating-display {
+      margin-left: 8px;
+
+      color: #988d87;
       font-size: 12px;
+      white-space: nowrap;
     }
 
-    .rating-option.selected {
-      background: #d9997e;
-      border-color: #d9997e;
+    /* =====================================
+       ADDRESS SEARCH
+    ===================================== */
+
+    .address-search {
+      position: relative;
+    }
+
+    .address-input-row {
+      display: flex;
+      gap: 7px;
+    }
+
+    .address-input-row .input {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .address-search-button {
+      flex: 0 0 76px;
+
+      height: 45px;
+
+      border: none;
+      border-radius: 12px;
+
+      background: #879c8d;
       color: #fff;
+
+      font-size: 11px;
       font-weight: 700;
     }
 
-    /* =========================
-       Location
-    ========================= */
+    .suggestions {
+      position: absolute;
+
+      left: 0;
+      right: 0;
+      top: 51px;
+
+      z-index: 3000;
+
+      display: none;
+
+      overflow: hidden;
+
+      border: 1px solid var(--line);
+      border-radius: 14px;
+
+      background: #fff;
+
+      box-shadow:
+        0 10px 30px rgba(70, 50, 40, 0.12);
+    }
+
+    .suggestions.show {
+      display: block;
+    }
+
+    .suggestion-item {
+      width: 100%;
+
+      padding: 11px 13px;
+
+      border: none;
+      border-bottom: 1px solid #f1eae7;
+
+      background: #fff;
+
+      text-align: left;
+
+      color: #5f5752;
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    .suggestion-item:last-child {
+      border-bottom: none;
+    }
+
+    .suggestion-item:active {
+      background: #faf3ef;
+    }
+
+    .suggestion-title {
+      font-weight: 700;
+    }
+
+    .suggestion-address {
+      margin-top: 2px;
+
+      color: #a19892;
+      font-size: 9px;
+    }
+
+    .address-help {
+      margin-top: 6px;
+
+      color: #aaa19b;
+      font-size: 9px;
+      line-height: 1.6;
+    }
+
+    /* =====================================
+       LOCATION
+    ===================================== */
 
     .location-box {
-      padding: 13px;
-      border: 1px solid #eee3de;
+      padding: 12px;
+
+      border: 1px solid var(--line);
       border-radius: 14px;
+
       background: #fffaf8;
     }
 
     .location-status {
-      margin-bottom: 10px;
-      font-size: 12px;
-      color: #9c918b;
+      margin-bottom: 9px;
+
+      color: #a19892;
+      font-size: 11px;
       line-height: 1.6;
     }
 
     .location-status.has-location {
-      color: #758d77;
+      color: #748c78;
     }
 
     .location-buttons {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 8px;
+
+      gap: 7px;
     }
 
     .secondary-button {
-      height: 43px;
-      border: 1px solid #e2d5ce;
+      height: 42px;
+
+      border: 1px solid #e3d7d1;
       border-radius: 11px;
+
       background: #fff;
-      color: #756b65;
-      font-size: 12px;
+
+      color: #776d67;
+
+      font-size: 11px;
     }
 
     .secondary-button.danger {
-      color: #b27668;
+      color: #b27a6c;
     }
 
-    .address-search-row {
-      display: flex;
-      gap: 8px;
-      margin-top: 10px;
-    }
-
-    .address-search-row .input {
-      min-width: 0;
-    }
-
-    .search-address-button {
-      flex: 0 0 92px;
-      border: none;
-      border-radius: 11px;
-      background: #8fa596;
-      color: #fff;
-      font-size: 12px;
-    }
-
-    .address-help {
-      margin-top: 7px;
-      font-size: 10px;
-      line-height: 1.6;
-      color: #aaa09a;
-    }
-
-    /* =========================
-       Photos
-    ========================= */
+    /* =====================================
+       PHOTOS
+    ===================================== */
 
     .photo-input {
       width: 100%;
-      padding: 12px;
-      border: 1px dashed #ddcdc5;
+
+      padding: 11px;
+
+      border: 1px dashed #ddcec7;
       border-radius: 13px;
+
       background: #fffaf8;
+
+      color: #81766f;
+      font-size: 11px;
     }
 
     .photo-preview-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
+
       gap: 7px;
-      margin-top: 10px;
+
+      margin-top: 9px;
     }
 
     .photo-preview {
       position: relative;
-      aspect-ratio: 1;
+
       overflow: hidden;
+
+      aspect-ratio: 1;
+
       border-radius: 11px;
+
       background: #f2ece9;
     }
 
     .photo-preview img {
       width: 100%;
       height: 100%;
+
       object-fit: cover;
     }
 
     .photo-remove {
       position: absolute;
+
       top: 5px;
       right: 5px;
-      width: 26px;
-      height: 26px;
+
+      width: 25px;
+      height: 25px;
+
       border: none;
       border-radius: 50%;
-      background: rgba(50, 40, 35, 0.68);
+
+      background: rgba(50, 40, 35, 0.7);
+
       color: #fff;
       font-size: 14px;
     }
 
-    /* =========================
-       Buttons
-    ========================= */
+    /* =====================================
+       BUTTONS
+    ===================================== */
 
     .primary-button {
       width: 100%;
-      height: 50px;
+      height: 49px;
+
       border: none;
       border-radius: 14px;
-      background: #d4937a;
-      color: #fff;
-      font-size: 14px;
-      font-weight: 700;
-      box-shadow: 0 7px 18px rgba(177, 115, 91, 0.18);
-    }
 
-    .primary-button:active {
-      transform: translateY(1px);
+      background: var(--accent);
+      color: #fff;
+
+      font-size: 13px;
+      font-weight: 700;
+
+      box-shadow:
+        0 7px 18px rgba(177, 115, 91, 0.18);
     }
 
     .cancel-button {
       width: 100%;
-      height: 46px;
-      margin-top: 9px;
+      height: 44px;
+
+      margin-top: 8px;
+
       border: none;
       border-radius: 14px;
-      background: #f5efec;
+
+      background: #f6f0ed;
+
       color: #81766f;
-      font-size: 13px;
+
+      font-size: 12px;
     }
 
-    /* =========================
-       Detail
-    ========================= */
+    /* =====================================
+       DETAIL
+    ===================================== */
 
     .detail-card {
       overflow: hidden;
-      border: 1px solid #eee3de;
-      border-radius: 20px;
+
+      border: 1px solid var(--line);
+      border-radius: 21px;
+
       background: #fff;
-      box-shadow: 0 5px 20px rgba(74, 54, 45, 0.05);
+
+      box-shadow: var(--shadow);
     }
 
     .detail-body {
@@ -592,74 +819,91 @@
 
     .detail-place {
       margin: 0;
-      font-size: 25px;
-      line-height: 1.35;
-      color: #514945;
+
+      font-size: 24px;
+      line-height: 1.4;
+
       word-break: break-word;
     }
 
     .detail-date {
-      margin-top: 7px;
-      font-size: 12px;
+      margin-top: 6px;
+
       color: #a09791;
+      font-size: 11px;
     }
 
     .detail-section {
-      margin-top: 20px;
+      margin-top: 19px;
     }
 
     .detail-section-title {
-      margin-bottom: 7px;
-      font-size: 11px;
+      margin-bottom: 6px;
+
+      color: #9a8e87;
+      font-size: 10px;
       font-weight: 700;
-      color: #9a8d86;
     }
 
     .detail-comment {
-      font-size: 14px;
-      line-height: 1.85;
-      white-space: pre-wrap;
       color: #675e59;
+
+      font-size: 13px;
+      line-height: 1.85;
+
+      white-space: pre-wrap;
     }
 
     .detail-location {
-      font-size: 12px;
+      color: #817771;
+
+      font-size: 11px;
       line-height: 1.7;
-      color: #847a74;
     }
 
     .detail-actions {
       display: grid;
       grid-template-columns: 1fr 1fr;
+
       gap: 8px;
-      margin-top: 18px;
+
+      margin-top: 19px;
     }
 
     .detail-photo-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
+
       gap: 7px;
     }
 
     .detail-photo-grid img {
       width: 100%;
+
       aspect-ratio: 1;
+
       object-fit: cover;
+
       border-radius: 12px;
+
       background: #f1ece9;
     }
 
-    /* =========================
-       Map
-    ========================= */
+    /* =====================================
+       MAP
+    ===================================== */
 
     #map {
       width: 100%;
       height: calc(100vh - 165px);
+
       min-height: 450px;
+
       border-radius: 18px;
+
       overflow: hidden;
-      box-shadow: 0 5px 20px rgba(74, 54, 45, 0.07);
+
+      box-shadow: var(--shadow);
     }
 
     .map-wrapper {
@@ -668,23 +912,67 @@
 
     .map-floating {
       position: absolute;
-      right: 12px;
+
       top: 12px;
+      right: 12px;
+
       z-index: 500;
+
       display: flex;
       flex-direction: column;
+
       gap: 7px;
     }
 
     .map-floating button {
       width: 43px;
       height: 43px;
+
       border: none;
       border-radius: 50%;
+
       background: rgba(255, 255, 255, 0.95);
-      box-shadow: 0 4px 15px rgba(50, 40, 35, 0.15);
-      color: #645b56;
+
+      color: #665c56;
+
       font-size: 17px;
+
+      box-shadow:
+        0 4px 15px rgba(50, 40, 35, 0.15);
+    }
+
+    .custom-pin {
+      position: relative;
+
+      width: 34px;
+      height: 34px;
+
+      border-radius: 50% 50% 50% 0;
+
+      transform: rotate(-45deg);
+
+      background: #d4937a;
+
+      border: 3px solid #fff;
+
+      box-shadow:
+        0 3px 10px rgba(60, 45, 40, 0.25);
+    }
+
+    .custom-pin::after {
+      content: "";
+
+      position: absolute;
+
+      width: 10px;
+      height: 10px;
+
+      border-radius: 50%;
+
+      background: #fff;
+
+      top: 9px;
+      left: 9px;
     }
 
     .leaflet-popup-content-wrapper {
@@ -693,1527 +981,2013 @@
 
     .leaflet-popup-content {
       margin: 13px;
-      font-size: 12px;
+
+      font-size: 11px;
       line-height: 1.6;
     }
 
-    .custom-pin {
-      width: 34px;
-      height: 34px;
-      border-radius: 50% 50% 50% 0;
-      transform: rotate(-45deg);
-      background: #d4937a;
-      border: 3px solid #fff;
-      box-shadow: 0 3px 10px rgba(60, 45, 40, 0.25);
-    }
-
-    .custom-pin::after {
-      content: "";
-      position: absolute;
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: #fff;
-      top: 9px;
-      left: 9px;
-    }
-
-    /* =========================
-       Settings
-    ========================= */
+    /* =====================================
+       SETTINGS
+    ===================================== */
 
     .settings-list {
       display: flex;
       flex-direction: column;
+
       gap: 10px;
     }
 
     .settings-item {
       padding: 16px;
-      border: 1px solid #eee3de;
-      border-radius: 16px;
+
+      border: 1px solid var(--line);
+      border-radius: 17px;
+
       background: #fff;
+
+      box-shadow: 0 3px 15px rgba(70, 50, 40, 0.025);
     }
 
     .settings-item-title {
-      font-weight: 700;
-      font-size: 14px;
       color: #5e5550;
+
+      font-size: 13px;
+      font-weight: 700;
     }
 
     .settings-item-text {
       margin-top: 5px;
-      font-size: 11px;
-      line-height: 1.7;
+
       color: #9d928b;
+
+      font-size: 10px;
+      line-height: 1.7;
     }
 
-    /* =========================
-       Bottom Nav
-    ========================= */
+    /* =====================================
+       BOTTOM NAV
+    ===================================== */
 
     .bottom-nav {
       position: fixed;
+
       left: 0;
       right: 0;
       bottom: 0;
+
       z-index: 2000;
+
       padding:
         7px
         10px
         calc(7px + env(safe-area-inset-bottom));
-      background: rgba(255, 255, 255, 0.94);
-      backdrop-filter: blur(15px);
+
+      background: rgba(255, 255, 255, 0.95);
+
+      backdrop-filter: blur(16px);
+
       border-top: 1px solid #eee5e0;
     }
 
     .bottom-nav-inner {
       max-width: 500px;
+
       margin: 0 auto;
+
       display: grid;
       grid-template-columns: repeat(3, 1fr);
+
       gap: 5px;
     }
 
     .nav-button {
-      height: 56px;
+      height: 53px;
+
       border: none;
       border-radius: 15px;
+
       background: transparent;
+
       color: #a09690;
-      font-size: 10px;
+
+      font-size: 9px;
     }
 
     .nav-icon {
       display: block;
-      font-size: 20px;
-      margin-bottom: 3px;
+
+      margin-bottom: 2px;
+
+      font-size: 19px;
     }
 
     .nav-button.active {
       background: #f9efeb;
+
       color: #ad7763;
+
       font-weight: 700;
     }
 
-    /* =========================
+    /* =====================================
        FAB
-    ========================= */
+    ===================================== */
 
     .fab {
       position: fixed;
-      right: max(20px, calc((100vw - 760px) / 2 + 20px));
-      bottom: 92px;
+
+      right: 20px;
+
+      /*
+       * ナビゲーションと重ならない位置。
+       * safe-areaにも対応。
+       */
+
+      bottom:
+        calc(
+          92px +
+          env(safe-area-inset-bottom)
+        );
+
       z-index: 1500;
-      width: 57px;
-      height: 57px;
+
+      width: 55px;
+      height: 55px;
+
       border: none;
       border-radius: 50%;
-      background: #d4937a;
+
+      background: var(--accent);
+
       color: #fff;
-      font-size: 25px;
-      box-shadow: 0 9px 25px rgba(171, 109, 86, 0.25);
+
+      font-size: 24px;
+
+      box-shadow:
+        0 9px 25px rgba(171, 109, 86, 0.25);
     }
 
-    /* =========================
-       Toast
-    ========================= */
+    /* =====================================
+       TOAST
+    ===================================== */
 
     .toast {
       position: fixed;
+
       left: 50%;
-      bottom: 88px;
+      bottom: calc(
+        90px +
+        env(safe-area-inset-bottom)
+      );
+
       z-index: 5000;
-      transform: translate(-50%, 20px);
+
+      transform:
+        translate(-50%, 20px);
+
       min-width: 220px;
       max-width: calc(100vw - 40px);
-      padding: 12px 16px;
+
+      padding: 11px 15px;
+
       border-radius: 13px;
+
       background: rgba(55, 48, 44, 0.92);
+
       color: #fff;
+
       text-align: center;
-      font-size: 12px;
+
+      font-size: 11px;
+
       opacity: 0;
+
       pointer-events: none;
+
       transition: 0.25s;
     }
 
     .toast.show {
       opacity: 1;
-      transform: translate(-50%, 0);
+
+      transform:
+        translate(-50%, 0);
     }
 
-    /* =========================
-       Responsive
-    ========================= */
+    /* =====================================
+       MOBILE
+    ===================================== */
 
     @media (max-width: 430px) {
       .screen {
-        padding: 15px;
-      }
-
-      .rating-selector {
-        gap: 3px;
-      }
-
-      .rating-option {
-        height: 35px;
-        font-size: 11px;
+        padding: 14px;
       }
 
       .memory-card-date {
-        max-width: 82px;
+        width: 72px;
+        min-width: 72px;
+      }
+
+      .star-button {
+        width: 29px;
+      }
+
+      .rating-display {
+        margin-left: 4px;
       }
     }
   </style>
 </head>
 
 <body>
-  <div class="app">
 
-    <!-- Header -->
-    <header class="header">
-      <div class="header-inner">
-        <div>
-          <h1 class="app-title">マイ思い出マップ</h1>
-          <div class="header-subtitle">大切な場所を、そっと残す</div>
-        </div>
-        <button class="header-icon" onclick="openScreen('settings')">⚙️</button>
-      </div>
-    </header>
+<div class="app">
 
-    <!-- =========================
-         HOME
-    ========================== -->
-    <section id="screen-home" class="screen active">
-      <h2 class="page-title">思い出</h2>
+  <!-- HEADER -->
 
-      <div class="search-box">
-        <input
-          id="searchInput"
-          class="search-input"
-          type="search"
-          placeholder="場所や思い出を検索"
-          oninput="renderMemoryList()"
-        />
-        <button class="filter-button" onclick="toggleFilters()">☷</button>
-      </div>
+  <header class="header">
+    <div class="header-inner">
 
-      <div id="filters" class="filters">
-        <div class="filter-row">
-          <select id="genreFilter" class="select" onchange="renderMemoryList()">
-            <option value="">すべてのジャンル</option>
-            <option value="食事">食事</option>
-            <option value="カフェ">カフェ</option>
-            <option value="旅行">旅行</option>
-            <option value="買い物">買い物</option>
-            <option value="デート">デート</option>
-            <option value="観光">観光</option>
-            <option value="その他">その他</option>
-          </select>
+      <div>
+        <h1 class="app-title">
+          マイ思い出マップ
+        </h1>
 
-          <select id="ratingFilter" class="select" onchange="renderMemoryList()">
-            <option value="">すべての評価</option>
-            <option value="10">10</option>
-            <option value="9">9以上</option>
-            <option value="8">8以上</option>
-            <option value="7">7以上</option>
-            <option value="6">6以上</option>
-            <option value="5">5以上</option>
-          </select>
+        <div class="header-subtitle">
+          大切な場所を、そっと残す
         </div>
       </div>
-
-      <div id="memoryList" class="memory-list"></div>
-    </section>
-
-    <!-- =========================
-         REGISTER
-    ========================== -->
-    <section id="screen-register" class="screen">
-      <h2 id="formTitle" class="page-title">思い出を登録</h2>
-
-      <div class="form-card">
-
-        <div class="form-group">
-          <label class="form-label">
-            場所名<span class="required">*</span>
-          </label>
-          <input
-            id="placeInput"
-            class="input"
-            type="text"
-            placeholder="例：軽井沢のカフェ"
-          />
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">
-            日付<span class="required">*</span>
-          </label>
-          <input id="dateInput" class="input" type="date" />
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">評価</label>
-
-          <div id="ratingSelector" class="rating-selector"></div>
-          <input id="ratingInput" type="hidden" value="5" />
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">ジャンル</label>
-
-          <select id="genreInput" class="select">
-            <option value="">選択してください</option>
-            <option value="食事">食事</option>
-            <option value="カフェ">カフェ</option>
-            <option value="旅行">旅行</option>
-            <option value="買い物">買い物</option>
-            <option value="デート">デート</option>
-            <option value="観光">観光</option>
-            <option value="その他">その他</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">金額</label>
-
-          <input
-            id="priceInput"
-            class="input"
-            type="number"
-            inputmode="numeric"
-            min="0"
-            placeholder="例：5000"
-          />
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">住所・場所</label>
-
-          <input
-            id="addressInput"
-            class="input"
-            type="text"
-            placeholder="住所や施設名を入力"
-          />
-
-          <div class="address-search-row">
-            <button
-              class="search-address-button"
-              onclick="searchAddress()"
-            >
-              地図で検索
-            </button>
-          </div>
-
-          <div class="address-help">
-            住所や施設名を入力して「地図で検索」を押すと、その場所を地図上で探します。
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">位置情報</label>
-
-          <div class="location-box">
-            <div id="locationStatus" class="location-status">
-              位置情報は登録されていません
-            </div>
-
-            <div class="location-buttons">
-              <button
-                class="secondary-button"
-                onclick="getCurrentLocation()"
-              >
-                📍 現在地を取得
-              </button>
-
-              <button
-                class="secondary-button danger"
-                onclick="clearLocation()"
-              >
-                位置情報を削除
-              </button>
-            </div>
-          </div>
-
-          <input id="latitudeInput" type="hidden" />
-          <input id="longitudeInput" type="hidden" />
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">写真</label>
-
-          <input
-            id="photoInput"
-            class="photo-input"
-            type="file"
-            accept="image/*"
-            multiple
-            onchange="handlePhotoSelect(event)"
-          />
-
-          <div id="photoPreviewGrid" class="photo-preview-grid"></div>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">思い出・コメント</label>
-
-          <textarea
-            id="commentInput"
-            class="textarea"
-            placeholder="そのときのことを残しておこう"
-          ></textarea>
-        </div>
-
-        <button class="primary-button" onclick="saveMemory()">
-          保存する
-        </button>
-
-        <button class="cancel-button" onclick="openScreen('home')">
-          キャンセル
-        </button>
-      </div>
-    </section>
-
-    <!-- =========================
-         DETAIL
-    ========================== -->
-    <section id="screen-detail" class="screen">
-      <button
-        class="secondary-button"
-        style="width:100%; margin-bottom:12px;"
-        onclick="openScreen('home')"
-      >
-        ← 思い出一覧へ
-      </button>
-
-      <div id="detailContent"></div>
-    </section>
-
-    <!-- =========================
-         MAP
-    ========================== -->
-    <section id="screen-map" class="screen">
-      <h2 class="page-title">思い出マップ</h2>
-
-      <div class="map-wrapper">
-        <div id="map"></div>
-
-        <div class="map-floating">
-          <button onclick="moveToCurrentLocation()" title="現在地">⌖</button>
-          <button onclick="fitAllMarkers()" title="全体を見る">◎</button>
-        </div>
-      </div>
-    </section>
-
-    <!-- =========================
-         SETTINGS
-    ========================== -->
-    <section id="screen-settings" class="screen">
-      <h2 class="page-title">設定</h2>
-
-      <div class="settings-list">
-
-        <div class="settings-item">
-          <div class="settings-item-title">
-            データ
-          </div>
-
-          <div class="settings-item-text">
-            このアプリの思い出データと写真は、この端末のブラウザ内に保存されています。
-          </div>
-        </div>
-
-        <div class="settings-item">
-          <div class="settings-item-title">
-            保存状況
-          </div>
-
-          <div
-            id="storageStatus"
-            class="settings-item-text"
-          >
-            確認中...
-          </div>
-        </div>
-
-        <div class="settings-item">
-          <div class="settings-item-title">
-            バックアップ
-          </div>
-
-          <div class="settings-item-text">
-            バックアップ機能は今後追加できます。
-          </div>
-        </div>
-
-      </div>
-    </section>
-  </div>
-
-  <!-- FAB -->
-  <button
-    id="fab"
-    class="fab"
-    onclick="openRegister()"
-  >
-    ＋
-  </button>
-
-  <!-- Bottom Navigation -->
-  <nav class="bottom-nav">
-    <div class="bottom-nav-inner">
 
       <button
-        id="nav-home"
-        class="nav-button active"
-        onclick="openScreen('home')"
-      >
-        <span class="nav-icon">♡</span>
-        思い出
-      </button>
-
-      <button
-        id="nav-map"
-        class="nav-button"
-        onclick="openScreen('map')"
-      >
-        <span class="nav-icon">⌖</span>
-        マップ
-      </button>
-
-      <button
-        id="nav-settings"
-        class="nav-button"
+        class="header-icon"
         onclick="openScreen('settings')"
       >
-        <span class="nav-icon">⚙</span>
-        設定
+        ⚙️
       </button>
 
     </div>
-  </nav>
+  </header>
 
-  <!-- Toast -->
-  <div id="toast" class="toast"></div>
 
-  <!-- Leaflet -->
-  <script
-    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-    crossorigin=""
-  ></script>
+  <!-- ===================================
+       HOME
+  ==================================== -->
 
-  <script>
-    /* =========================================================
-       Database
-    ========================================================= */
+  <section
+    id="screen-home"
+    class="screen active"
+  >
 
-    const DB_NAME = "myMemoryMapDB";
-    const DB_VERSION = 2;
+    <h2 class="page-title">
+      思い出
+    </h2>
 
-    const MEMORY_STORE = "memories";
-    const PHOTO_STORE = "photos";
+    <div class="search-box">
 
-    let db = null;
+      <input
+        id="searchInput"
+        class="search-input"
+        type="search"
+        placeholder="場所や思い出を検索"
+        oninput="renderMemoryList()"
+      />
 
-    let editingMemoryId = null;
+      <button
+        class="filter-button"
+        onclick="toggleFilters()"
+      >
+        ☷
+      </button>
 
-    let selectedRating = 5;
+    </div>
 
-    let existingPhotos = [];
-    let newPhotos = [];
+    <div
+      id="filters"
+      class="filters"
+    >
 
-    let map = null;
-    let mapMarkers = [];
+      <div class="filter-row">
 
-    /* =========================================================
-       Utility
-    ========================================================= */
+        <select
+          id="genreFilter"
+          class="select"
+          onchange="renderMemoryList()"
+        >
+          <option value="">
+            すべてのジャンル
+          </option>
 
-    function generateId() {
-      if (crypto && crypto.randomUUID) {
-        return crypto.randomUUID();
-      }
+          <option value="食事">
+            食事
+          </option>
 
-      return (
-        Date.now().toString(36) +
-        Math.random().toString(36).substring(2)
+          <option value="カフェ">
+            カフェ
+          </option>
+
+          <option value="旅行">
+            旅行
+          </option>
+
+          <option value="買い物">
+            買い物
+          </option>
+
+          <option value="デート">
+            デート
+          </option>
+
+          <option value="観光">
+            観光
+          </option>
+
+          <option value="その他">
+            その他
+          </option>
+        </select>
+
+        <select
+          id="ratingFilter"
+          class="select"
+          onchange="renderMemoryList()"
+        >
+          <option value="">
+            すべての評価
+          </option>
+
+          <option value="9">
+            9以上
+          </option>
+
+          <option value="8">
+            8以上
+          </option>
+
+          <option value="7">
+            7以上
+          </option>
+
+          <option value="6">
+            6以上
+          </option>
+
+          <option value="5">
+            5以上
+          </option>
+        </select>
+
+      </div>
+
+    </div>
+
+    <div
+      id="memoryList"
+      class="memory-list"
+    ></div>
+
+  </section>
+
+
+  <!-- ===================================
+       REGISTER / EDIT
+  ==================================== -->
+
+  <section
+    id="screen-register"
+    class="screen"
+  >
+
+    <h2
+      id="formTitle"
+      class="page-title"
+    >
+      思い出を登録
+    </h2>
+
+    <div class="form-card">
+
+      <!-- PLACE -->
+
+      <div class="form-group">
+
+        <label class="form-label">
+          場所名<span class="required">*</span>
+        </label>
+
+        <input
+          id="placeInput"
+          class="input"
+          type="text"
+          placeholder="例：軽井沢のカフェ"
+        />
+
+      </div>
+
+
+      <!-- DATE -->
+
+      <div class="form-group">
+
+        <label class="form-label">
+          日付<span class="required">*</span>
+        </label>
+
+        <input
+          id="dateInput"
+          class="input date-input"
+          type="date"
+        />
+
+      </div>
+
+
+      <!-- RATING -->
+
+      <div class="form-group">
+
+        <label class="form-label">
+          評価
+        </label>
+
+        <div
+          id="starRating"
+          class="star-rating"
+        ></div>
+
+        <input
+          id="ratingInput"
+          type="hidden"
+          value="5"
+        />
+
+      </div>
+
+
+      <!-- GENRE -->
+
+      <div class="form-group">
+
+        <label class="form-label">
+          ジャンル
+        </label>
+
+        <select
+          id="genreInput"
+          class="select"
+        >
+          <option value="">
+            選択してください
+          </option>
+
+          <option value="食事">
+            食事
+          </option>
+
+          <option value="カフェ">
+            カフェ
+          </option>
+
+          <option value="旅行">
+            旅行
+          </option>
+
+          <option value="買い物">
+            買い物
+          </option>
+
+          <option value="デート">
+            デート
+          </option>
+
+          <option value="観光">
+            観光
+          </option>
+
+          <option value="その他">
+            その他
+          </option>
+        </select>
+
+      </div>
+
+
+      <!-- PRICE -->
+
+      <div class="form-group">
+
+        <label class="form-label">
+          金額
+        </label>
+
+        <input
+          id="priceInput"
+          class="input"
+          type="number"
+          inputmode="numeric"
+          min="0"
+          placeholder="例：5000"
+        />
+
+      </div>
+
+
+      <!-- ADDRESS -->
+
+      <div class="form-group">
+
+        <label class="form-label">
+          住所・場所
+        </label>
+
+        <div class="address-search">
+
+          <div class="address-input-row">
+
+            <input
+              id="addressInput"
+              class="input"
+              type="text"
+              autocomplete="off"
+              placeholder="店名・駅名・住所など"
+              oninput="handleAddressInput()"
+            />
+
+            <button
+              class="address-search-button"
+              onclick="searchAddress()"
+            >
+              検索
+            </button>
+
+          </div>
+
+          <div
+            id="suggestions"
+            class="suggestions"
+          ></div>
+
+        </div>
+
+        <div class="address-help">
+          店名や駅名を入力すると候補が表示されます。候補をタップすると場所を登録できます。
+        </div>
+
+      </div>
+
+
+      <!-- LOCATION -->
+
+      <div class="form-group">
+
+        <label class="form-label">
+          位置情報
+        </label>
+
+        <div class="location-box">
+
+          <div
+            id="locationStatus"
+            class="location-status"
+          >
+            位置情報は登録されていません
+          </div>
+
+          <div class="location-buttons">
+
+            <button
+              class="secondary-button"
+              onclick="getCurrentLocation()"
+            >
+              📍 現在地を取得
+            </button>
+
+            <button
+              class="secondary-button danger"
+              onclick="clearLocation()"
+            >
+              位置情報を削除
+            </button>
+
+          </div>
+
+        </div>
+
+        <input
+          id="latitudeInput"
+          type="hidden"
+        />
+
+        <input
+          id="longitudeInput"
+          type="hidden"
+        />
+
+      </div>
+
+
+      <!-- PHOTOS -->
+
+      <div class="form-group">
+
+        <label class="form-label">
+          写真
+        </label>
+
+        <input
+          id="photoInput"
+          class="photo-input"
+          type="file"
+          accept="image/*"
+          multiple
+          onchange="handlePhotoSelect(event)"
+        />
+
+        <div
+          id="photoPreviewGrid"
+          class="photo-preview-grid"
+        ></div>
+
+      </div>
+
+
+      <!-- COMMENT -->
+
+      <div class="form-group">
+
+        <label class="form-label">
+          思い出・コメント
+        </label>
+
+        <textarea
+          id="commentInput"
+          class="textarea"
+          placeholder="そのときのことを残しておこう"
+        ></textarea>
+
+      </div>
+
+
+      <button
+        class="primary-button"
+        onclick="saveMemory()"
+      >
+        保存する
+      </button>
+
+      <button
+        class="cancel-button"
+        onclick="openScreen('home')"
+      >
+        キャンセル
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- ===================================
+       DETAIL
+  ==================================== -->
+
+  <section
+    id="screen-detail"
+    class="screen"
+  >
+
+    <button
+      class="secondary-button"
+      style="width:100%; margin-bottom:12px;"
+      onclick="openScreen('home')"
+    >
+      ← 思い出一覧へ
+    </button>
+
+    <div id="detailContent"></div>
+
+  </section>
+
+
+  <!-- ===================================
+       MAP
+  ==================================== -->
+
+  <section
+    id="screen-map"
+    class="screen"
+  >
+
+    <h2 class="page-title">
+      思い出マップ
+    </h2>
+
+    <div class="map-wrapper">
+
+      <div id="map"></div>
+
+      <div class="map-floating">
+
+        <button
+          onclick="moveToCurrentLocation()"
+          title="現在地"
+        >
+          ⌖
+        </button>
+
+        <button
+          onclick="fitAllMarkers()"
+          title="全体を見る"
+        >
+          ◎
+        </button>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- ===================================
+       SETTINGS
+  ==================================== -->
+
+  <section
+    id="screen-settings"
+    class="screen"
+  >
+
+    <h2 class="page-title">
+      設定
+    </h2>
+
+    <div class="settings-list">
+
+      <div class="settings-item">
+
+        <div class="settings-item-title">
+          データ
+        </div>
+
+        <div class="settings-item-text">
+          このアプリの思い出データと写真は、この端末のブラウザ内に保存されています。
+        </div>
+
+      </div>
+
+      <div class="settings-item">
+
+        <div class="settings-item-title">
+          保存状況
+        </div>
+
+        <div
+          id="storageStatus"
+          class="settings-item-text"
+        >
+          確認中...
+        </div>
+
+      </div>
+
+      <div class="settings-item">
+
+        <div class="settings-item-title">
+          バックアップ
+        </div>
+
+        <div class="settings-item-text">
+          バックアップ機能は今後追加できます。
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+</div>
+
+
+<!-- FAB -->
+
+<button
+  id="fab"
+  class="fab"
+  onclick="openRegister()"
+>
+  ＋
+</button>
+
+
+<!-- BOTTOM NAV -->
+
+<nav class="bottom-nav">
+
+  <div class="bottom-nav-inner">
+
+    <button
+      id="nav-home"
+      class="nav-button active"
+      onclick="openScreen('home')"
+    >
+      <span class="nav-icon">
+        ♡
+      </span>
+
+      思い出
+    </button>
+
+    <button
+      id="nav-map"
+      class="nav-button"
+      onclick="openScreen('map')"
+    >
+      <span class="nav-icon">
+        ⌖
+      </span>
+
+      マップ
+    </button>
+
+    <button
+      id="nav-settings"
+      class="nav-button"
+      onclick="openScreen('settings')"
+    >
+      <span class="nav-icon">
+        ⚙
+      </span>
+
+      設定
+    </button>
+
+  </div>
+
+</nav>
+
+
+<div
+  id="toast"
+  class="toast"
+></div>
+
+
+<!-- LEAFLET -->
+
+<script
+  src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+  crossorigin=""
+></script>
+
+
+<script>
+/* =========================================================
+   DATABASE
+========================================================= */
+
+const DB_NAME = "myMemoryMapDB";
+const DB_VERSION = 2;
+
+const MEMORY_STORE = "memories";
+const PHOTO_STORE = "photos";
+
+let db = null;
+
+let editingMemoryId = null;
+
+let selectedRating = 5;
+
+let existingPhotos = [];
+let newPhotos = [];
+
+let map = null;
+let mapMarkers = [];
+
+let suggestionTimer = null;
+
+
+/* =========================================================
+   UTILITY
+========================================================= */
+
+function generateId() {
+
+  if (
+    window.crypto &&
+    crypto.randomUUID
+  ) {
+    return crypto.randomUUID();
+  }
+
+  return (
+    Date.now().toString(36) +
+    Math.random()
+      .toString(36)
+      .substring(2)
+  );
+}
+
+
+function isValidCoordinate(value) {
+
+  return (
+    value !== null &&
+    value !== undefined &&
+    value !== "" &&
+    Number.isFinite(
+      Number(value)
+    )
+  );
+}
+
+
+function hasLocation(memory) {
+
+  return (
+    isValidCoordinate(
+      memory.latitude
+    ) &&
+    isValidCoordinate(
+      memory.longitude
+    )
+  );
+}
+
+
+function escapeHtml(value) {
+
+  if (
+    value === null ||
+    value === undefined
+  ) {
+    return "";
+  }
+
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll(
+      "'",
+      "&#039;"
+    );
+}
+
+
+function formatDate(dateString) {
+
+  if (!dateString) {
+    return "";
+  }
+
+  const date =
+    new Date(
+      dateString + "T00:00:00"
+    );
+
+  if (
+    Number.isNaN(
+      date.getTime()
+    )
+  ) {
+    return dateString;
+  }
+
+  return (
+    date.getFullYear() +
+    "/" +
+    String(
+      date.getMonth() + 1
+    ).padStart(2, "0") +
+    "/" +
+    String(
+      date.getDate()
+    ).padStart(2, "0")
+  );
+}
+
+
+function formatStars(rating) {
+
+  const value =
+    Math.min(
+      10,
+      Math.max(
+        0,
+        Number(rating) || 0
+      )
+    );
+
+  return (
+    "★".repeat(value) +
+    "☆".repeat(10 - value)
+  );
+}
+
+
+function showToast(message) {
+
+  const toast =
+    document.getElementById(
+      "toast"
+    );
+
+  toast.textContent = message;
+
+  toast.classList.add("show");
+
+  clearTimeout(
+    showToast.timer
+  );
+
+  showToast.timer =
+    setTimeout(() => {
+      toast.classList.remove(
+        "show"
       );
-    }
+    }, 2400);
+}
 
-    function isValidCoordinate(value) {
-      return (
-        value !== null &&
-        value !== undefined &&
-        value !== "" &&
-        Number.isFinite(Number(value))
-      );
-    }
 
-    function hasLocation(memory) {
-      return (
-        isValidCoordinate(memory.latitude) &&
-        isValidCoordinate(memory.longitude)
-      );
-    }
+/* =========================================================
+   DATABASE OPEN
+========================================================= */
 
-    function escapeHtml(value) {
-      if (value === null || value === undefined) {
-        return "";
-      }
+function openDatabase() {
 
-      return String(value)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
-    }
+  return new Promise(
+    (resolve, reject) => {
 
-    function formatDate(dateString) {
-      if (!dateString) {
-        return "";
-      }
+      const request =
+        indexedDB.open(
+          DB_NAME,
+          DB_VERSION
+        );
 
-      const date = new Date(dateString + "T00:00:00");
+      request.onupgradeneeded =
+        event => {
 
-      if (Number.isNaN(date.getTime())) {
-        return dateString;
-      }
+          const database =
+            event.target.result;
 
-      return (
-        date.getFullYear() +
-        "/" +
-        String(date.getMonth() + 1).padStart(2, "0") +
-        "/" +
-        String(date.getDate()).padStart(2, "0")
-      );
-    }
+          if (
+            !database.objectStoreNames
+              .contains(
+                MEMORY_STORE
+              )
+          ) {
 
-    function formatRating(rating) {
-      const value = Number(rating) || 0;
+            const store =
+              database.createObjectStore(
+                MEMORY_STORE,
+                {
+                  keyPath: "id"
+                }
+              );
 
-      return "★".repeat(value) + "☆".repeat(10 - value);
-    }
-
-    function showToast(message) {
-      const toast = document.getElementById("toast");
-
-      toast.textContent = message;
-      toast.classList.add("show");
-
-      clearTimeout(showToast.timer);
-
-      showToast.timer = setTimeout(() => {
-        toast.classList.remove("show");
-      }, 2400);
-    }
-
-    /* =========================================================
-       IndexedDB
-    ========================================================= */
-
-    function openDatabase() {
-      return new Promise((resolve, reject) => {
-        const request = indexedDB.open(DB_NAME, DB_VERSION);
-
-        request.onupgradeneeded = event => {
-          const database = event.target.result;
-
-          if (!database.objectStoreNames.contains(MEMORY_STORE)) {
-            const memoryStore = database.createObjectStore(
-              MEMORY_STORE,
-              { keyPath: "id" }
-            );
-
-            memoryStore.createIndex(
+            store.createIndex(
               "date",
               "date",
-              { unique: false }
+              {
+                unique: false
+              }
             );
           }
 
-          if (!database.objectStoreNames.contains(PHOTO_STORE)) {
-            const photoStore = database.createObjectStore(
-              PHOTO_STORE,
-              { keyPath: "id" }
-            );
+          if (
+            !database.objectStoreNames
+              .contains(
+                PHOTO_STORE
+              )
+          ) {
 
-            photoStore.createIndex(
+            const store =
+              database.createObjectStore(
+                PHOTO_STORE,
+                {
+                  keyPath: "id"
+                }
+              );
+
+            store.createIndex(
               "memoryId",
               "memoryId",
-              { unique: false }
+              {
+                unique: false
+              }
             );
           }
         };
 
-        request.onsuccess = () => {
-          db = request.result;
 
-          db.onversionchange = () => {
+      request.onsuccess = () => {
+
+        db = request.result;
+
+        db.onversionchange =
+          () => {
             db.close();
           };
 
-          resolve(db);
-        };
+        resolve(db);
+      };
 
-        request.onerror = () => {
-          reject(request.error);
-        };
-      });
+
+      request.onerror = () => {
+        reject(
+          request.error
+        );
+      };
+
     }
+  );
+}
 
-    function getAllMemories() {
-      return new Promise((resolve, reject) => {
-        const transaction = db.transaction(
+
+/* =========================================================
+   MEMORY DB
+========================================================= */
+
+function getAllMemories() {
+
+  return new Promise(
+    (resolve, reject) => {
+
+      const tx =
+        db.transaction(
           MEMORY_STORE,
           "readonly"
         );
 
-        const store = transaction.objectStore(MEMORY_STORE);
+      const request =
+        tx
+          .objectStore(
+            MEMORY_STORE
+          )
+          .getAll();
 
-        const request = store.getAll();
-
-        request.onsuccess = () => {
-          resolve(request.result || []);
+      request.onsuccess =
+        () => {
+          resolve(
+            request.result || []
+          );
         };
 
-        request.onerror = () => {
-          reject(request.error);
+      request.onerror =
+        () => {
+          reject(
+            request.error
+          );
         };
-      });
     }
+  );
+}
 
-    function getMemory(id) {
-      return new Promise((resolve, reject) => {
-        const transaction = db.transaction(
+
+function getMemory(id) {
+
+  return new Promise(
+    (resolve, reject) => {
+
+      const tx =
+        db.transaction(
           MEMORY_STORE,
           "readonly"
         );
 
-        const store = transaction.objectStore(MEMORY_STORE);
+      const request =
+        tx
+          .objectStore(
+            MEMORY_STORE
+          )
+          .get(id);
 
-        const request = store.get(id);
-
-        request.onsuccess = () => {
-          resolve(request.result || null);
+      request.onsuccess =
+        () => {
+          resolve(
+            request.result || null
+          );
         };
 
-        request.onerror = () => {
-          reject(request.error);
+      request.onerror =
+        () => {
+          reject(
+            request.error
+          );
         };
-      });
     }
+  );
+}
 
-    function putMemory(memory) {
-      return new Promise((resolve, reject) => {
-        const transaction = db.transaction(
+
+function putMemory(memory) {
+
+  return new Promise(
+    (resolve, reject) => {
+
+      const tx =
+        db.transaction(
           MEMORY_STORE,
           "readwrite"
         );
 
-        transaction.objectStore(MEMORY_STORE).put(memory);
+      tx
+        .objectStore(
+          MEMORY_STORE
+        )
+        .put(memory);
 
-        transaction.oncomplete = () => resolve();
+      tx.oncomplete =
+        () => resolve();
 
-        transaction.onerror = () => {
-          reject(transaction.error);
+      tx.onerror =
+        () => {
+          reject(
+            tx.error
+          );
         };
-      });
     }
+  );
+}
 
-    function deleteMemoryRecord(id) {
-      return new Promise((resolve, reject) => {
-        const transaction = db.transaction(
-          [MEMORY_STORE, PHOTO_STORE],
+
+function deleteMemoryRecord(id) {
+
+  return new Promise(
+    (resolve, reject) => {
+
+      const tx =
+        db.transaction(
+          [
+            MEMORY_STORE,
+            PHOTO_STORE
+          ],
           "readwrite"
         );
 
-        transaction.objectStore(MEMORY_STORE).delete(id);
+      tx
+        .objectStore(
+          MEMORY_STORE
+        )
+        .delete(id);
 
-        const photoStore =
-          transaction.objectStore(PHOTO_STORE);
+      const photoStore =
+        tx.objectStore(
+          PHOTO_STORE
+        );
 
-        const index = photoStore.index("memoryId");
+      const index =
+        photoStore.index(
+          "memoryId"
+        );
 
-        const request = index.getAllKeys(id);
+      const request =
+        index.getAllKeys(id);
 
-        request.onsuccess = () => {
-          for (const photoId of request.result) {
-            photoStore.delete(photoId);
-          }
+      request.onsuccess =
+        () => {
+
+          request.result.forEach(
+            photoId => {
+              photoStore.delete(
+                photoId
+              );
+            }
+          );
         };
 
-        transaction.oncomplete = () => resolve();
+      tx.oncomplete =
+        () => resolve();
 
-        transaction.onerror = () => {
-          reject(transaction.error);
+      tx.onerror =
+        () => {
+          reject(
+            tx.error
+          );
         };
-      });
     }
+  );
+}
 
-    function getPhotosForMemory(memoryId) {
-      return new Promise((resolve, reject) => {
-        const transaction = db.transaction(
+
+/* =========================================================
+   PHOTO DB
+========================================================= */
+
+function getPhotosForMemory(
+  memoryId
+) {
+
+  return new Promise(
+    (resolve, reject) => {
+
+      const tx =
+        db.transaction(
           PHOTO_STORE,
           "readonly"
         );
 
-        const index =
-          transaction.objectStore(PHOTO_STORE)
-            .index("memoryId");
+      const index =
+        tx
+          .objectStore(
+            PHOTO_STORE
+          )
+          .index(
+            "memoryId"
+          );
 
-        const request = index.getAll(memoryId);
+      const request =
+        index.getAll(
+          memoryId
+        );
 
-        request.onsuccess = () => {
-          resolve(request.result || []);
+      request.onsuccess =
+        () => {
+          resolve(
+            request.result || []
+          );
         };
 
-        request.onerror = () => {
-          reject(request.error);
+      request.onerror =
+        () => {
+          reject(
+            request.error
+          );
         };
-      });
     }
+  );
+}
 
-    function putPhoto(photo) {
-      return new Promise((resolve, reject) => {
-        const transaction = db.transaction(
+
+function putPhoto(photo) {
+
+  return new Promise(
+    (resolve, reject) => {
+
+      const tx =
+        db.transaction(
           PHOTO_STORE,
           "readwrite"
         );
 
-        transaction.objectStore(PHOTO_STORE).put(photo);
+      tx
+        .objectStore(
+          PHOTO_STORE
+        )
+        .put(photo);
 
-        transaction.oncomplete = () => resolve();
+      tx.oncomplete =
+        () => resolve();
 
-        transaction.onerror = () => {
-          reject(transaction.error);
+      tx.onerror =
+        () => {
+          reject(
+            tx.error
+          );
         };
-      });
     }
+  );
+}
 
-    function deletePhoto(photoId) {
-      return new Promise((resolve, reject) => {
-        const transaction = db.transaction(
+
+function deletePhoto(id) {
+
+  return new Promise(
+    (resolve, reject) => {
+
+      const tx =
+        db.transaction(
           PHOTO_STORE,
           "readwrite"
         );
 
-        transaction.objectStore(PHOTO_STORE).delete(photoId);
+      tx
+        .objectStore(
+          PHOTO_STORE
+        )
+        .delete(id);
 
-        transaction.oncomplete = () => resolve();
+      tx.oncomplete =
+        () => resolve();
 
-        transaction.onerror = () => {
-          reject(transaction.error);
+      tx.onerror =
+        () => {
+          reject(
+            tx.error
+          );
         };
-      });
     }
+  );
+}
 
-    /* =========================================================
-       Legacy migration
-    ========================================================= */
 
-    async function migrateLocalStorage() {
-      const migrationKey =
-        "myMemoryMap_localStorage_migration_v2";
+/* =========================================================
+   MIGRATION
+========================================================= */
 
-      if (localStorage.getItem(migrationKey)) {
-        return;
-      }
+async function migrateLocalStorage() {
 
-      let oldData = null;
+  const migrationKey =
+    "myMemoryMap_localStorage_migration_v3";
 
-      try {
-        const raw = localStorage.getItem("memories");
+  if (
+    localStorage.getItem(
+      migrationKey
+    )
+  ) {
+    return;
+  }
 
-        if (raw) {
-          oldData = JSON.parse(raw);
-        }
-      } catch (error) {
-        console.warn(
-          "旧データの読み込みに失敗しました",
-          error
-        );
-      }
+  let oldData = null;
 
-      if (!Array.isArray(oldData)) {
-        localStorage.setItem(migrationKey, "done");
-        return;
-      }
+  try {
 
-      const currentMemories = await getAllMemories();
-
-      const existingIds = new Set(
-        currentMemories.map(memory => String(memory.id))
+    const raw =
+      localStorage.getItem(
+        "memories"
       );
 
-      for (const oldMemory of oldData) {
-        if (!oldMemory || typeof oldMemory !== "object") {
-          continue;
-        }
-
-        let id = oldMemory.id
-          ? String(oldMemory.id)
-          : generateId();
-
-        if (existingIds.has(id)) {
-          continue;
-        }
-
-        existingIds.add(id);
-
-        /*
-         * 重要:
-         *
-         * 位置情報がないデータに対して
-         * 現在地などを絶対に補完しない。
-         */
-
-        let latitude = null;
-        let longitude = null;
-
-        if (
-          isValidCoordinate(oldMemory.latitude) &&
-          isValidCoordinate(oldMemory.longitude)
-        ) {
-          latitude = Number(oldMemory.latitude);
-          longitude = Number(oldMemory.longitude);
-        }
-
-        const memory = {
-          id,
-
-          place:
-            oldMemory.place ||
-            oldMemory.placeName ||
-            "",
-
-          rating:
-            Math.min(
-              10,
-              Math.max(
-                1,
-                Number(oldMemory.rating) || 5
-              )
-            ),
-
-          date:
-            oldMemory.date ||
-            new Date().toISOString().slice(0, 10),
-
-          genre:
-            oldMemory.genre || "",
-
-          price:
-            oldMemory.price !== undefined &&
-            oldMemory.price !== null
-              ? Number(oldMemory.price) || 0
-              : 0,
-
-          comment:
-            oldMemory.comment || "",
-
-          address:
-            oldMemory.address || "",
-
-          latitude,
-          longitude,
-
-          createdAt:
-            oldMemory.createdAt ||
-            Date.now(),
-
-          updatedAt:
-            Date.now()
-        };
-
-        await putMemory(memory);
-      }
-
-      localStorage.setItem(
-        migrationKey,
-        "done"
-      );
+    if (raw) {
+      oldData =
+        JSON.parse(raw);
     }
 
-    /* =========================================================
-       Navigation
-    ========================================================= */
+  } catch (error) {
 
-    function openScreen(name) {
-      document
-        .querySelectorAll(".screen")
-        .forEach(screen => {
-          screen.classList.remove("active");
-        });
+    console.warn(
+      "旧データ読み込み失敗",
+      error
+    );
+  }
 
-      const target =
-        document.getElementById(
-          "screen-" + name
-        );
+  if (
+    !Array.isArray(oldData)
+  ) {
 
-      if (!target) {
-        return;
-      }
+    localStorage.setItem(
+      migrationKey,
+      "done"
+    );
 
-      target.classList.add("active");
+    return;
+  }
 
-      document
-        .querySelectorAll(".nav-button")
-        .forEach(button => {
-          button.classList.remove("active");
-        });
 
-      const nav =
-        document.getElementById(
-          "nav-" + name
-        );
+  const current =
+    await getAllMemories();
 
-      if (nav) {
-        nav.classList.add("active");
-      }
+  const ids =
+    new Set(
+      current.map(
+        memory =>
+          String(memory.id)
+      )
+    );
 
-      const fab =
-        document.getElementById("fab");
 
-      if (
-        name === "home" ||
-        name === "map"
-      ) {
-        fab.style.display = "block";
-      } else {
-        fab.style.display = "none";
-      }
+  for (
+    const oldMemory
+    of oldData
+  ) {
 
-      window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-      });
-
-      if (name === "home") {
-        renderMemoryList();
-      }
-
-      if (name === "map") {
-        setTimeout(() => {
-          initializeMap();
-
-          if (map) {
-            map.invalidateSize(true);
-          }
-
-          renderMapMarkers();
-        }, 150);
-      }
-
-      if (name === "settings") {
-        renderStorageStatus();
-      }
+    if (
+      !oldMemory ||
+      typeof oldMemory !==
+        "object"
+    ) {
+      continue;
     }
 
-    /* =========================================================
-       Form
-    ========================================================= */
+    let id =
+      oldMemory.id
+        ? String(
+            oldMemory.id
+          )
+        : generateId();
 
-    function buildRatingSelector() {
-      const container =
-        document.getElementById(
-          "ratingSelector"
-        );
 
-      container.innerHTML = "";
-
-      for (let i = 1; i <= 10; i++) {
-        const button =
-          document.createElement("button");
-
-        button.type = "button";
-        button.className = "rating-option";
-
-        button.textContent = i;
-
-        button.onclick = () => {
-          setRating(i);
-        };
-
-        container.appendChild(button);
-      }
-
-      setRating(selectedRating);
+    if (ids.has(id)) {
+      continue;
     }
 
-    function setRating(value) {
-      selectedRating =
+    ids.add(id);
+
+
+    /*
+     * 位置情報は、
+     * 元データに本当にある場合だけ保存。
+     *
+     * 現在地などは一切取得しない。
+     */
+
+    let latitude = null;
+    let longitude = null;
+
+    if (
+      isValidCoordinate(
+        oldMemory.latitude
+      ) &&
+      isValidCoordinate(
+        oldMemory.longitude
+      )
+    ) {
+
+      latitude =
+        Number(
+          oldMemory.latitude
+        );
+
+      longitude =
+        Number(
+          oldMemory.longitude
+        );
+    }
+
+
+    const memory = {
+
+      id,
+
+      place:
+        oldMemory.place ||
+        oldMemory.placeName ||
+        "",
+
+      rating:
         Math.min(
           10,
           Math.max(
             1,
-            Number(value) || 5
+            Number(
+              oldMemory.rating
+            ) || 5
           )
-        );
+        ),
 
-      document.getElementById(
-        "ratingInput"
-      ).value = selectedRating;
-
-      document
-        .querySelectorAll(".rating-option")
-        .forEach((button, index) => {
-          button.classList.toggle(
-            "selected",
-            index + 1 === selectedRating
-          );
-        });
-    }
-
-    function resetForm() {
-      editingMemoryId = null;
-
-      existingPhotos = [];
-      newPhotos = [];
-
-      document.getElementById(
-        "formTitle"
-      ).textContent = "思い出を登録";
-
-      document.getElementById(
-        "placeInput"
-      ).value = "";
-
-      document.getElementById(
-        "dateInput"
-      ).value =
+      date:
+        oldMemory.date ||
         new Date()
           .toISOString()
-          .slice(0, 10);
+          .slice(0, 10),
 
-      document.getElementById(
-        "genreInput"
-      ).value = "";
+      genre:
+        oldMemory.genre || "",
 
-      document.getElementById(
-        "priceInput"
-      ).value = "";
+      price:
+        Number(
+          oldMemory.price
+        ) || 0,
 
-      document.getElementById(
-        "addressInput"
-      ).value = "";
+      address:
+        oldMemory.address || "",
 
-      document.getElementById(
-        "commentInput"
-      ).value = "";
+      comment:
+        oldMemory.comment || "",
 
-      document.getElementById(
-        "latitudeInput"
-      ).value = "";
+      latitude,
+      longitude,
 
-      document.getElementById(
-        "longitudeInput"
-      ).value = "";
+      createdAt:
+        oldMemory.createdAt ||
+        Date.now(),
 
-      document.getElementById(
-        "photoInput"
-      ).value = "";
+      updatedAt:
+        Date.now()
+    };
 
-      setRating(5);
 
-      updateLocationStatus();
+    await putMemory(
+      memory
+    );
+  }
 
-      renderPhotoPreview();
-    }
 
-    async function openRegister() {
-      resetForm();
+  localStorage.setItem(
+    migrationKey,
+    "done"
+  );
+}
 
-      openScreen("register");
-    }
 
-    async function openEditMemory(id) {
-      try {
-        const memory =
-          await getMemory(id);
+/* =========================================================
+   NAVIGATION
+========================================================= */
 
-        if (!memory) {
-          showToast(
-            "この思い出のデータが見つかりません"
+function openScreen(name) {
+
+  document
+    .querySelectorAll(
+      ".screen"
+    )
+    .forEach(screen => {
+      screen.classList.remove(
+        "active"
+      );
+    });
+
+
+  const target =
+    document.getElementById(
+      "screen-" + name
+    );
+
+  if (!target) {
+    return;
+  }
+
+  target.classList.add(
+    "active"
+  );
+
+
+  document
+    .querySelectorAll(
+      ".nav-button"
+    )
+    .forEach(button => {
+      button.classList.remove(
+        "active"
+      );
+    });
+
+
+  const nav =
+    document.getElementById(
+      "nav-" + name
+    );
+
+  if (nav) {
+    nav.classList.add(
+      "active"
+    );
+  }
+
+
+  const fab =
+    document.getElementById(
+      "fab"
+    );
+
+  /*
+   * 登録画面ではFABを消す。
+   */
+
+  if (
+    name === "home" ||
+    name === "map"
+  ) {
+    fab.style.display =
+      "block";
+  } else {
+    fab.style.display =
+      "none";
+  }
+
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+
+
+  if (
+    name === "home"
+  ) {
+    renderMemoryList();
+  }
+
+
+  if (
+    name === "map"
+  ) {
+
+    setTimeout(
+      async () => {
+
+        initializeMap();
+
+        if (map) {
+          map.invalidateSize(
+            true
           );
-
-          return;
         }
 
-        editingMemoryId =
-          String(memory.id);
+        await renderMapMarkers();
 
-        document.getElementById(
-          "formTitle"
-        ).textContent = "思い出を編集";
+      },
+      150
+    );
+  }
 
-        document.getElementById(
-          "placeInput"
-        ).value =
-          memory.place || "";
 
-        document.getElementById(
-          "dateInput"
-        ).value =
-          memory.date || "";
+  if (
+    name === "settings"
+  ) {
+    renderStorageStatus();
+  }
+}
 
-        document.getElementById(
-          "genreInput"
-        ).value =
-          memory.genre || "";
 
-        document.getElementById(
-          "priceInput"
-        ).value =
-          memory.price || "";
+/* =========================================================
+   STAR RATING
+========================================================= */
 
-        document.getElementById(
-          "addressInput"
-        ).value =
-          memory.address || "";
+function buildStarRating() {
 
-        document.getElementById(
-          "commentInput"
-        ).value =
-          memory.comment || "";
+  const container =
+    document.getElementById(
+      "starRating"
+    );
 
-        /*
-         * GPSは既存データに本当に存在する場合だけ表示。
-         * 編集開始時に現在地を取得することは絶対にしない。
-         */
+  container.innerHTML = "";
 
-        if (hasLocation(memory)) {
-          document.getElementById(
-            "latitudeInput"
-          ).value =
-            memory.latitude;
 
-          document.getElementById(
-            "longitudeInput"
-          ).value =
-            memory.longitude;
-        } else {
-          document.getElementById(
-            "latitudeInput"
-          ).value = "";
+  for (
+    let i = 1;
+    i <= 10;
+    i++
+  ) {
 
-          document.getElementById(
-            "longitudeInput"
-          ).value = "";
-        }
+    const button =
+      document.createElement(
+        "button"
+      );
 
-        setRating(
-          Number(memory.rating) || 5
-        );
+    button.type =
+      "button";
 
-        existingPhotos =
-          await getPhotosForMemory(
-            memory.id
-          );
+    button.className =
+      "star-button";
 
-        newPhotos = [];
+    button.textContent =
+      "★";
 
-        document.getElementById(
-          "photoInput"
-        ).value = "";
-
-        updateLocationStatus();
-
-        renderPhotoPreview();
-
-        openScreen("register");
-
-      } catch (error) {
-        console.error(error);
-
-        showToast(
-          "編集データの読み込みに失敗しました"
-        );
-      }
-    }
-
-    async function saveMemory() {
-      const place =
-        document.getElementById(
-          "placeInput"
-        ).value.trim();
-
-      const date =
-        document.getElementById(
-          "dateInput"
-        ).value;
-
-      if (!place) {
-        showToast(
-          "場所名を入力してください"
-        );
-
-        return;
-      }
-
-      if (!date) {
-        showToast(
-          "日付を入力してください"
-        );
-
-        return;
-      }
-
-      /*
-       * 重要:
-       * 空欄なら null。
-       * 現在地を勝手に取得しない。
-       */
-
-      const latitudeRaw =
-        document.getElementById(
-          "latitudeInput"
-        ).value;
-
-      const longitudeRaw =
-        document.getElementById(
-          "longitudeInput"
-        ).value;
-
-      let latitude = null;
-      let longitude = null;
-
-      if (
-        isValidCoordinate(latitudeRaw) &&
-        isValidCoordinate(longitudeRaw)
-      ) {
-        latitude =
-          Number(latitudeRaw);
-
-        longitude =
-          Number(longitudeRaw);
-      }
-
-      const memory = {
-        id:
-          editingMemoryId ||
-          generateId(),
-
-        place,
-
-        rating:
-          Number(
-            document.getElementById(
-              "ratingInput"
-            ).value
-          ) || 5,
-
-        date,
-
-        genre:
-          document.getElementById(
-            "genreInput"
-          ).value,
-
-        price:
-          Number(
-            document.getElementById(
-              "priceInput"
-            ).value
-          ) || 0,
-
-        address:
-          document.getElementById(
-            "addressInput"
-          ).value.trim(),
-
-        comment:
-          document.getElementById(
-            "commentInput"
-          ).value.trim(),
-
-        latitude,
-        longitude,
-
-        createdAt:
-          editingMemoryId
-            ? (
-                await getMemory(
-                  editingMemoryId
-                )
-              )?.createdAt || Date.now()
-            : Date.now(),
-
-        updatedAt:
-          Date.now()
+    button.onclick =
+      () => {
+        setRating(i);
       };
 
-      try {
-        await putMemory(memory);
+    container.appendChild(
+      button
+    );
+  }
 
-        /*
-         * 新規写真を保存
-         */
+  updateStars();
+}
 
-        for (const photo of newPhotos) {
-          await putPhoto({
-            id: generateId(),
-            memoryId: memory.id,
-            name: photo.name,
-            type: photo.type,
-            blob: photo.blob,
-            createdAt: Date.now()
-          });
-        }
 
-        /*
-         * 削除された既存写真
-         *
-         * existingPhotosには現在残っている写真だけが入る。
-         */
+function setRating(value) {
 
-        if (editingMemoryId) {
-          const oldPhotos =
-            await getPhotosForMemory(
-              memory.id
-            );
+  selectedRating =
+    Math.min(
+      10,
+      Math.max(
+        1,
+        Number(value) || 5
+      )
+    );
 
-          const currentIds =
-            new Set(
-              existingPhotos.map(
-                photo => photo.id
-              )
-            );
+  document.getElementById(
+    "ratingInput"
+  ).value =
+    selectedRating;
 
-          for (const oldPhoto of oldPhotos) {
-            if (
-              !currentIds.has(oldPhoto.id)
-            ) {
-              await deletePhoto(
-                oldPhoto.id
-              );
-            }
-          }
-        }
+  updateStars();
+}
 
-        showToast(
-          editingMemoryId
-            ? "思い出を更新しました"
-            : "思い出を保存しました"
-        );
 
-        resetForm();
+function updateStars() {
 
-        openScreen("home");
+  document
+    .querySelectorAll(
+      ".star-button"
+    )
+    .forEach(
+      (button, index) => {
 
-      } catch (error) {
-        console.error(error);
-
-        showToast(
-          "保存に失敗しました"
+        button.classList.toggle(
+          "selected",
+          index + 1 <=
+            selectedRating
         );
       }
-    }
+    );
 
-    /* =========================================================
-       Location
-    ========================================================= */
 
-    function updateLocationStatus() {
-      const latitude =
-        document.getElementById(
-          "latitudeInput"
-        ).value;
+  const container =
+    document.getElementById(
+      "starRating"
+    );
 
-      const longitude =
-        document.getElementById(
-          "longitudeInput"
-        ).value;
+  let display =
+    container.querySelector(
+      ".rating-display"
+    );
 
-      const status =
-        document.getElementById(
-          "locationStatus"
-        );
+  if (!display) {
 
-      if (
-        isValidCoordinate(latitude) &&
-        isValidCoordinate(longitude)
-      ) {
-        status.classList.add(
-          "has-location"
-        );
+    display =
+      document.createElement(
+        "span"
+      );
 
-        status.innerHTML =
-          "📍 位置情報あり<br>" +
-          "緯度: " +
-          Number(latitude).toFixed(6) +
-          "<br>" +
-          "経度: " +
-          Number(longitude).toFixed(6);
-      } else {
-        status.classList.remove(
-          "has-location"
-        );
+    display.className =
+      "rating-display";
 
-        status.textContent =
-          "位置情報は登録されていません";
-      }
-    }
+    container.appendChild(
+      display
+    );
+  }
 
-    function getCurrentLocation() {
-      if (
-        !navigator.geolocation
-      ) {
-        showToast(
-          "このブラウザでは位置情報を取得できません"
-        );
+  display.textContent =
+    `${selectedRating} / 10`;
+}
 
-        return;
-      }
+
+/* =========================================================
+   FORM RESET
+========================================================= */
+
+function resetForm() {
+
+  editingMemoryId =
+    null;
+
+  existingPhotos = [];
+  newPhotos = [];
+
+
+  document.getElementById(
+    "formTitle"
+  ).textContent =
+    "思い出を登録";
+
+
+  document.getElementById(
+    "placeInput"
+  ).value = "";
+
+
+  document.getElementById(
+    "dateInput"
+  ).value =
+    new Date()
+      .toISOString()
+      .slice(0, 10);
+
+
+  document.getElementById(
+    "genreInput"
+  ).value = "";
+
+
+  document.getElementById(
+    "priceInput"
+  ).value = "";
+
+
+  document.getElementById(
+    "addressInput"
+  ).value = "";
+
+
+  document.getElementById(
+    "commentInput"
+  ).value = "";
+
+
+  document.getElementById(
+    "latitudeInput"
+  ).value = "";
+
+
+  document.getElementById(
+    "longitudeInput"
+  ).value = "";
+
+
+  document.getElementById(
+    "photoInput"
+  ).value = "";
+
+
+  document.getElementById(
+    "suggestions"
+  ).classList.remove(
+    "show"
+  );
+
+
+  setRating(5);
+
+  updateLocationStatus();
+
+  renderPhotoPreview();
+}
+
+
+async function openRegister() {
+
+  resetForm();
+
+  openScreen(
+    "register"
+  );
+}
+
+
+/* =========================================================
+   EDIT
+========================================================= */
+
+async function openEditMemory(
+  id
+) {
+
+  try {
+
+    const memory =
+      await getMemory(id);
+
+
+    if (!memory) {
 
       showToast(
-        "現在地を取得しています..."
+        "この思い出のデータが見つかりません"
       );
 
-      navigator.geolocation.getCurrentPosition(
-        position => {
-          const {
-            latitude,
-            longitude
-          } = position.coords;
-
-          document.getElementById(
-            "latitudeInput"
-          ).value =
-            latitude;
-
-          document.getElementById(
-            "longitudeInput"
-          ).value =
-            longitude;
-
-          updateLocationStatus();
-
-          showToast(
-            "現在地を登録しました"
-          );
-        },
-
-        error => {
-          console.error(error);
-
-          showToast(
-            "位置情報を取得できませんでした"
-          );
-        },
-
-        {
-          enableHighAccuracy: true,
-          timeout: 10000,
-          maximumAge: 0
-        }
-      );
+      return;
     }
 
-    function clearLocation() {
+
+    editingMemoryId =
+      String(memory.id);
+
+
+    document.getElementById(
+      "formTitle"
+    ).textContent =
+      "思い出を編集";
+
+
+    document.getElementById(
+      "placeInput"
+    ).value =
+      memory.place || "";
+
+
+    document.getElementById(
+      "dateInput"
+    ).value =
+      memory.date || "";
+
+
+    document.getElementById(
+      "genreInput"
+    ).value =
+      memory.genre || "";
+
+
+    document.getElementById(
+      "priceInput"
+    ).value =
+      memory.price || "";
+
+
+    document.getElementById(
+      "addressInput"
+    ).value =
+      memory.address || "";
+
+
+    document.getElementById(
+      "commentInput"
+    ).value =
+      memory.comment || "";
+
+
+    /*
+     * 編集時にGPSを取得しない。
+     */
+
+    if (
+      hasLocation(memory)
+    ) {
+
+      document.getElementById(
+        "latitudeInput"
+      ).value =
+        memory.latitude;
+
+      document.getElementById(
+        "longitudeInput"
+      ).value =
+        memory.longitude;
+
+    } else {
+
       document.getElementById(
         "latitudeInput"
       ).value = "";
@@ -2221,1171 +2995,2246 @@
       document.getElementById(
         "longitudeInput"
       ).value = "";
+    }
+
+
+    setRating(
+      Number(
+        memory.rating
+      ) || 5
+    );
+
+
+    existingPhotos =
+      await getPhotosForMemory(
+        memory.id
+      );
+
+    newPhotos = [];
+
+
+    document.getElementById(
+      "photoInput"
+    ).value = "";
+
+
+    updateLocationStatus();
+
+    renderPhotoPreview();
+
+
+    openScreen(
+      "register"
+    );
+
+  } catch (error) {
+
+    console.error(
+      error
+    );
+
+    showToast(
+      "編集データの読み込みに失敗しました"
+    );
+  }
+}
+
+
+/* =========================================================
+   SAVE
+========================================================= */
+
+async function saveMemory() {
+
+  const place =
+    document.getElementById(
+      "placeInput"
+    ).value.trim();
+
+
+  const date =
+    document.getElementById(
+      "dateInput"
+    ).value;
+
+
+  if (!place) {
+
+    showToast(
+      "場所名を入力してください"
+    );
+
+    return;
+  }
+
+
+  if (!date) {
+
+    showToast(
+      "日付を入力してください"
+    );
+
+    return;
+  }
+
+
+  /*
+   * 空欄なら必ずnull。
+   * 勝手に現在地を取得しない。
+   */
+
+  const latitudeRaw =
+    document.getElementById(
+      "latitudeInput"
+    ).value;
+
+  const longitudeRaw =
+    document.getElementById(
+      "longitudeInput"
+    ).value;
+
+
+  let latitude = null;
+  let longitude = null;
+
+
+  if (
+    isValidCoordinate(
+      latitudeRaw
+    ) &&
+    isValidCoordinate(
+      longitudeRaw
+    )
+  ) {
+
+    latitude =
+      Number(latitudeRaw);
+
+    longitude =
+      Number(longitudeRaw);
+  }
+
+
+  let oldMemory = null;
+
+
+  if (editingMemoryId) {
+
+    oldMemory =
+      await getMemory(
+        editingMemoryId
+      );
+
+    if (!oldMemory) {
+
+      showToast(
+        "編集対象のデータが見つかりません"
+      );
+
+      return;
+    }
+  }
+
+
+  const memory = {
+
+    id:
+      editingMemoryId ||
+      generateId(),
+
+    place,
+
+    rating:
+      Number(
+        document.getElementById(
+          "ratingInput"
+        ).value
+      ) || 5,
+
+    date,
+
+    genre:
+      document.getElementById(
+        "genreInput"
+      ).value,
+
+    price:
+      Number(
+        document.getElementById(
+          "priceInput"
+        ).value
+      ) || 0,
+
+    address:
+      document.getElementById(
+        "addressInput"
+      ).value.trim(),
+
+    comment:
+      document.getElementById(
+        "commentInput"
+      ).value.trim(),
+
+    latitude,
+    longitude,
+
+    createdAt:
+      oldMemory?.createdAt ||
+      Date.now(),
+
+    updatedAt:
+      Date.now()
+  };
+
+
+  try {
+
+    await putMemory(
+      memory
+    );
+
+
+    /*
+     * 新しい写真
+     */
+
+    for (
+      const photo
+      of newPhotos
+    ) {
+
+      await putPhoto({
+
+        id:
+          generateId(),
+
+        memoryId:
+          memory.id,
+
+        name:
+          photo.name,
+
+        type:
+          photo.type,
+
+        blob:
+          photo.blob,
+
+        createdAt:
+          Date.now()
+      });
+    }
+
+
+    /*
+     * 削除された写真
+     */
+
+    if (editingMemoryId) {
+
+      const oldPhotos =
+        await getPhotosForMemory(
+          memory.id
+        );
+
+      const currentIds =
+        new Set(
+          existingPhotos.map(
+            photo =>
+              photo.id
+          )
+        );
+
+
+      for (
+        const photo
+        of oldPhotos
+      ) {
+
+        if (
+          !currentIds.has(
+            photo.id
+          )
+        ) {
+
+          await deletePhoto(
+            photo.id
+          );
+        }
+      }
+    }
+
+
+    showToast(
+      editingMemoryId
+        ? "思い出を更新しました"
+        : "思い出を保存しました"
+    );
+
+
+    resetForm();
+
+    openScreen(
+      "home"
+    );
+
+  } catch (error) {
+
+    console.error(
+      error
+    );
+
+    showToast(
+      "保存に失敗しました"
+    );
+  }
+}
+
+
+/* =========================================================
+   LOCATION
+========================================================= */
+
+function updateLocationStatus() {
+
+  const latitude =
+    document.getElementById(
+      "latitudeInput"
+    ).value;
+
+  const longitude =
+    document.getElementById(
+      "longitudeInput"
+    ).value;
+
+
+  const status =
+    document.getElementById(
+      "locationStatus"
+    );
+
+
+  if (
+    isValidCoordinate(
+      latitude
+    ) &&
+    isValidCoordinate(
+      longitude
+    )
+  ) {
+
+    status.classList.add(
+      "has-location"
+    );
+
+    status.innerHTML =
+      "📍 位置情報あり<br>" +
+      "緯度: " +
+      Number(
+        latitude
+      ).toFixed(6) +
+      "<br>" +
+      "経度: " +
+      Number(
+        longitude
+      ).toFixed(6);
+
+  } else {
+
+    status.classList.remove(
+      "has-location"
+    );
+
+    status.textContent =
+      "位置情報は登録されていません";
+  }
+}
+
+
+function getCurrentLocation() {
+
+  if (
+    !navigator.geolocation
+  ) {
+
+    showToast(
+      "このブラウザでは位置情報を取得できません"
+    );
+
+    return;
+  }
+
+
+  showToast(
+    "現在地を取得しています..."
+  );
+
+
+  navigator.geolocation.getCurrentPosition(
+
+    position => {
+
+      document.getElementById(
+        "latitudeInput"
+      ).value =
+        position.coords.latitude;
+
+      document.getElementById(
+        "longitudeInput"
+      ).value =
+        position.coords.longitude;
+
 
       updateLocationStatus();
 
+
       showToast(
-        "位置情報を削除しました"
+        "現在地を登録しました"
       );
+    },
+
+
+    error => {
+
+      console.error(
+        error
+      );
+
+      showToast(
+        "位置情報を取得できませんでした"
+      );
+    },
+
+
+    {
+      enableHighAccuracy: true,
+      timeout: 10000,
+      maximumAge: 0
+    }
+  );
+}
+
+
+function clearLocation() {
+
+  document.getElementById(
+    "latitudeInput"
+  ).value = "";
+
+  document.getElementById(
+    "longitudeInput"
+  ).value = "";
+
+
+  updateLocationStatus();
+
+
+  showToast(
+    "位置情報を削除しました"
+  );
+}
+
+
+/* =========================================================
+   ADDRESS SUGGESTION
+========================================================= */
+
+function handleAddressInput() {
+
+  const value =
+    document.getElementById(
+      "addressInput"
+    ).value.trim();
+
+
+  clearTimeout(
+    suggestionTimer
+  );
+
+
+  if (
+    value.length < 2
+  ) {
+
+    hideSuggestions();
+
+    return;
+  }
+
+
+  suggestionTimer =
+    setTimeout(
+      () => {
+        fetchSuggestions(
+          value
+        );
+      },
+      500
+    );
+}
+
+
+async function fetchSuggestions(
+  query
+) {
+
+  try {
+
+    const url =
+      "https://nominatim.openstreetmap.org/search?" +
+      new URLSearchParams({
+
+        q: query,
+
+        format: "json",
+
+        limit: "5",
+
+        "accept-language":
+          "ja"
+      });
+
+
+    const response =
+      await fetch(
+        url
+      );
+
+
+    if (
+      !response.ok
+    ) {
+      return;
     }
 
-    /* =========================================================
-       Address Search
-    ========================================================= */
 
-    async function searchAddress() {
+    const results =
+      await response.json();
+
+
+    renderSuggestions(
+      results
+    );
+
+  } catch (error) {
+
+    console.warn(
+      "候補取得失敗",
+      error
+    );
+  }
+}
+
+
+function renderSuggestions(
+  results
+) {
+
+  const container =
+    document.getElementById(
+      "suggestions"
+    );
+
+
+  container.innerHTML = "";
+
+
+  if (
+    !results ||
+    !results.length
+  ) {
+
+    hideSuggestions();
+
+    return;
+  }
+
+
+  results.forEach(
+    result => {
+
+      const button =
+        document.createElement(
+          "button"
+        );
+
+      button.type =
+        "button";
+
+      button.className =
+        "suggestion-item";
+
+
+      const parts =
+        String(
+          result.display_name ||
+          ""
+        ).split(",");
+
+
+      const title =
+        parts.shift() ||
+        result.display_name;
+
+
       const address =
-        document.getElementById(
-          "addressInput"
-        ).value.trim();
+        parts
+          .slice(0, 4)
+          .join(",");
 
-      if (!address) {
-        showToast(
-          "住所や場所を入力してください"
-        );
 
-        return;
-      }
+      button.innerHTML = `
 
-      showToast(
-        "場所を検索しています..."
-      );
+        <div class="suggestion-title">
+          ${escapeHtml(
+            title
+          )}
+        </div>
 
-      try {
-        const url =
-          "https://nominatim.openstreetmap.org/search?" +
-          new URLSearchParams({
-            q: address,
-            format: "json",
-            limit: "1",
-            "accept-language": "ja"
-          });
+        <div class="suggestion-address">
+          ${escapeHtml(
+            address
+          )}
+        </div>
 
-        const response =
-          await fetch(url, {
-            headers: {
-              Accept:
-                "application/json"
-            }
-          });
+      `;
 
-        if (!response.ok) {
-          throw new Error(
-            "住所検索に失敗しました"
+
+      button.onclick =
+        () => {
+
+          selectSuggestion(
+            result
           );
-        }
-
-        const results =
-          await response.json();
-
-        if (!results.length) {
-          showToast(
-            "場所が見つかりませんでした"
-          );
-
-          return;
-        }
-
-        const result =
-          results[0];
-
-        document.getElementById(
-          "latitudeInput"
-        ).value =
-          Number(result.lat);
-
-        document.getElementById(
-          "longitudeInput"
-        ).value =
-          Number(result.lon);
-
-        /*
-         * 検索結果の表示名を住所欄に入れる。
-         */
-
-        document.getElementById(
-          "addressInput"
-        ).value =
-          result.display_name || address;
-
-        updateLocationStatus();
-
-        showToast(
-          "場所を登録しました"
-        );
-
-      } catch (error) {
-        console.error(error);
-
-        showToast(
-          "場所の検索に失敗しました"
-        );
-      }
-    }
-
-    /* =========================================================
-       Photos
-    ========================================================= */
-
-    function handlePhotoSelect(event) {
-      const files =
-        Array.from(
-          event.target.files || []
-        );
-
-      for (const file of files) {
-        if (
-          !file.type.startsWith(
-            "image/"
-          )
-        ) {
-          continue;
-        }
-
-        newPhotos.push({
-          name: file.name,
-          type: file.type,
-          blob: file
-        });
-      }
-
-      event.target.value = "";
-
-      renderPhotoPreview();
-    }
-
-    function removeExistingPhoto(id) {
-      existingPhotos =
-        existingPhotos.filter(
-          photo => photo.id !== id
-        );
-
-      renderPhotoPreview();
-    }
-
-    function removeNewPhoto(index) {
-      newPhotos.splice(index, 1);
-
-      renderPhotoPreview();
-    }
-
-    function renderPhotoPreview() {
-      const container =
-        document.getElementById(
-          "photoPreviewGrid"
-        );
-
-      container.innerHTML = "";
-
-      existingPhotos.forEach(photo => {
-        const wrapper =
-          document.createElement(
-            "div"
-          );
-
-        wrapper.className =
-          "photo-preview";
-
-        const img =
-          document.createElement(
-            "img"
-          );
-
-        const url =
-          URL.createObjectURL(
-            photo.blob
-          );
-
-        img.onload = () => {
-          URL.revokeObjectURL(url);
         };
 
-        img.src = url;
 
-        const button =
-          document.createElement(
-            "button"
+      container.appendChild(
+        button
+      );
+    }
+  );
+
+
+  container.classList.add(
+    "show"
+  );
+}
+
+
+function selectSuggestion(
+  result
+) {
+
+  document.getElementById(
+    "addressInput"
+  ).value =
+    result.display_name ||
+    "";
+
+
+  document.getElementById(
+    "latitudeInput"
+  ).value =
+    Number(
+      result.lat
+    );
+
+
+  document.getElementById(
+    "longitudeInput"
+  ).value =
+    Number(
+      result.lon
+    );
+
+
+  updateLocationStatus();
+
+  hideSuggestions();
+
+
+  showToast(
+    "場所を登録しました"
+  );
+}
+
+
+function hideSuggestions() {
+
+  document
+    .getElementById(
+      "suggestions"
+    )
+    .classList.remove(
+      "show"
+    );
+}
+
+
+async function searchAddress() {
+
+  const query =
+    document.getElementById(
+      "addressInput"
+    ).value.trim();
+
+
+  if (!query) {
+
+    showToast(
+      "場所を入力してください"
+    );
+
+    return;
+  }
+
+
+  try {
+
+    showToast(
+      "場所を検索しています..."
+    );
+
+
+    const url =
+      "https://nominatim.openstreetmap.org/search?" +
+      new URLSearchParams({
+
+        q: query,
+
+        format: "json",
+
+        limit: "1",
+
+        "accept-language":
+          "ja"
+      });
+
+
+    const response =
+      await fetch(
+        url
+      );
+
+
+    if (
+      !response.ok
+    ) {
+      throw new Error(
+        "検索失敗"
+      );
+    }
+
+
+    const results =
+      await response.json();
+
+
+    if (
+      !results.length
+    ) {
+
+      showToast(
+        "場所が見つかりませんでした"
+      );
+
+      return;
+    }
+
+
+    selectSuggestion(
+      results[0]
+    );
+
+  } catch (error) {
+
+    console.error(
+      error
+    );
+
+    showToast(
+      "場所の検索に失敗しました"
+    );
+  }
+}
+
+
+/* =========================================================
+   PHOTOS
+========================================================= */
+
+function handlePhotoSelect(
+  event
+) {
+
+  const files =
+    Array.from(
+      event.target.files || []
+    );
+
+
+  for (
+    const file
+    of files
+  ) {
+
+    if (
+      !file.type.startsWith(
+        "image/"
+      )
+    ) {
+      continue;
+    }
+
+
+    newPhotos.push({
+
+      name:
+        file.name,
+
+      type:
+        file.type,
+
+      blob:
+        file
+    });
+  }
+
+
+  event.target.value = "";
+
+  renderPhotoPreview();
+}
+
+
+function removeExistingPhoto(
+  id
+) {
+
+  existingPhotos =
+    existingPhotos.filter(
+      photo =>
+        photo.id !== id
+    );
+
+  renderPhotoPreview();
+}
+
+
+function removeNewPhoto(
+  index
+) {
+
+  newPhotos.splice(
+    index,
+    1
+  );
+
+  renderPhotoPreview();
+}
+
+
+function renderPhotoPreview() {
+
+  const container =
+    document.getElementById(
+      "photoPreviewGrid"
+    );
+
+  container.innerHTML = "";
+
+
+  existingPhotos.forEach(
+    photo => {
+
+      const wrapper =
+        document.createElement(
+          "div"
+        );
+
+      wrapper.className =
+        "photo-preview";
+
+
+      const img =
+        document.createElement(
+          "img"
+        );
+
+
+      const url =
+        URL.createObjectURL(
+          photo.blob
+        );
+
+
+      img.src = url;
+
+
+      img.onload =
+        () => {
+          URL.revokeObjectURL(
+            url
           );
+        };
 
-        button.className =
-          "photo-remove";
 
-        button.type = "button";
+      const button =
+        document.createElement(
+          "button"
+        );
 
-        button.textContent = "×";
+      button.type =
+        "button";
 
-        button.onclick = () => {
+      button.className =
+        "photo-remove";
+
+      button.textContent =
+        "×";
+
+
+      button.onclick =
+        () => {
+
           removeExistingPhoto(
             photo.id
           );
         };
 
-        wrapper.appendChild(img);
-        wrapper.appendChild(button);
 
-        container.appendChild(wrapper);
-      });
+      wrapper.appendChild(
+        img
+      );
 
-      newPhotos.forEach(
-        (photo, index) => {
-          const wrapper =
-            document.createElement(
-              "div"
-            );
+      wrapper.appendChild(
+        button
+      );
 
-          wrapper.className =
-            "photo-preview";
-
-          const img =
-            document.createElement(
-              "img"
-            );
-
-          const url =
-            URL.createObjectURL(
-              photo.blob
-            );
-
-          img.onload = () => {
-            URL.revokeObjectURL(url);
-          };
-
-          img.src = url;
-
-          const button =
-            document.createElement(
-              "button"
-            );
-
-          button.className =
-            "photo-remove";
-
-          button.type = "button";
-
-          button.textContent = "×";
-
-          button.onclick = () => {
-            removeNewPhoto(index);
-          };
-
-          wrapper.appendChild(img);
-          wrapper.appendChild(button);
-
-          container.appendChild(wrapper);
-        }
+      container.appendChild(
+        wrapper
       );
     }
+  );
 
-    /* =========================================================
-       Home List
-    ========================================================= */
 
-    async function renderMemoryList() {
-      const container =
-        document.getElementById(
-          "memoryList"
+  newPhotos.forEach(
+    (photo, index) => {
+
+      const wrapper =
+        document.createElement(
+          "div"
         );
 
-      const memories =
-        await getAllMemories();
+      wrapper.className =
+        "photo-preview";
 
-      const search =
-        document.getElementById(
-          "searchInput"
-        ).value
-          .trim()
-          .toLowerCase();
 
-      const genre =
-        document.getElementById(
-          "genreFilter"
-        ).value;
+      const img =
+        document.createElement(
+          "img"
+        );
 
-      const rating =
-        document.getElementById(
-          "ratingFilter"
-        ).value;
 
-      let filtered =
-        memories.filter(memory => {
+      const url =
+        URL.createObjectURL(
+          photo.blob
+        );
 
-          const text =
-            (
-              (memory.place || "") +
-              " " +
-              (memory.address || "") +
-              " " +
-              (memory.comment || "") +
-              " " +
-              (memory.genre || "")
-            ).toLowerCase();
 
-          if (
-            search &&
-            !text.includes(search)
-          ) {
-            return false;
-          }
+      img.src = url;
 
-          if (
-            genre &&
-            memory.genre !== genre
-          ) {
-            return false;
-          }
 
-          if (
-            rating &&
-            Number(memory.rating) <
-              Number(rating)
-          ) {
-            return false;
-          }
+      img.onload =
+        () => {
+          URL.revokeObjectURL(
+            url
+          );
+        };
 
-          return true;
-        });
 
-      filtered.sort(
-        (a, b) =>
-          String(b.date || "")
-            .localeCompare(
-              String(a.date || "")
-            )
+      const button =
+        document.createElement(
+          "button"
+        );
+
+      button.type =
+        "button";
+
+      button.className =
+        "photo-remove";
+
+      button.textContent =
+        "×";
+
+
+      button.onclick =
+        () => {
+
+          removeNewPhoto(
+            index
+          );
+        };
+
+
+      wrapper.appendChild(
+        img
       );
 
-      if (!filtered.length) {
-        container.innerHTML = `
-          <div class="empty">
-            <div class="empty-icon">♡</div>
-            <div class="empty-title">
-              まだ思い出がありません
-            </div>
-            <div class="empty-text">
-              行った場所や、そのときの気持ちを<br>
-              少しずつ残していきましょう。
-            </div>
-          </div>
-        `;
+      wrapper.appendChild(
+        button
+      );
 
-        return;
-      }
+      container.appendChild(
+        wrapper
+      );
+    }
+  );
+}
 
-      container.innerHTML = "";
 
-      for (const memory of filtered) {
-        const photos =
-          await getPhotosForMemory(
-            memory.id
-          );
+/* =========================================================
+   MEMORY LIST
+========================================================= */
 
-        const card =
-          document.createElement(
-            "article"
-          );
+async function renderMemoryList() {
 
-        card.className =
-          "memory-card";
+  const container =
+    document.getElementById(
+      "memoryList"
+    );
 
-        const main =
-          document.createElement(
-            "div"
-          );
 
-        main.className =
-          "memory-card-main";
+  const memories =
+    await getAllMemories();
 
-        let photoHtml = "";
 
-        if (photos.length) {
-          const firstPhoto =
-            photos[0];
+  const search =
+    document.getElementById(
+      "searchInput"
+    ).value
+      .trim()
+      .toLowerCase();
 
-          const url =
-            URL.createObjectURL(
-              firstPhoto.blob
-            );
 
-          photoHtml = `
-            <img
-              class="memory-card-photo"
-              src="${url}"
-              alt=""
-            />
-          `;
+  const genre =
+    document.getElementById(
+      "genreFilter"
+    ).value;
 
-          /*
-           * DOMに挿入された後も画像が表示されるように、
-           * URLの解放は画像ロード後に行う。
-           */
 
-          setTimeout(() => {
-            const img =
-              card.querySelector(
-                ".memory-card-photo"
-              );
+  const rating =
+    document.getElementById(
+      "ratingFilter"
+    ).value;
 
-            if (img) {
-              img.onload = () => {
-                URL.revokeObjectURL(url);
-              };
-            }
-          }, 0);
+
+  let filtered =
+    memories.filter(
+      memory => {
+
+        const text =
+          (
+            (memory.place ||
+              "") +
+            " " +
+            (memory.address ||
+              "") +
+            " " +
+            (memory.comment ||
+              "") +
+            " " +
+            (memory.genre ||
+              "")
+          ).toLowerCase();
+
+
+        if (
+          search &&
+          !text.includes(
+            search
+          )
+        ) {
+          return false;
         }
 
-        main.innerHTML = `
-          <div class="memory-card-top">
 
-            <div class="memory-card-date">
-              ${escapeHtml(
-                formatDate(memory.date)
-              )}
-            </div>
+        if (
+          genre &&
+          memory.genre !==
+            genre
+        ) {
+          return false;
+        }
 
-            <div class="memory-place-wrap">
 
-              <h3 class="memory-place">
-                ${escapeHtml(
-                  memory.place
-                )}
-              </h3>
+        if (
+          rating &&
+          Number(
+            memory.rating
+          ) <
+            Number(rating)
+        ) {
+          return false;
+        }
 
-              ${
-                memory.genre
-                  ? `
-                    <div class="memory-genre">
-                      ${escapeHtml(
-                        memory.genre
-                      )}
-                    </div>
-                  `
-                  : ""
-              }
 
-              <div class="rating">
-                ${formatRating(
-                  Number(memory.rating) || 0
-                )}
+        return true;
+      }
+    );
 
-                <span class="rating-number">
-                  ${
-                    Number(memory.rating) || 0
-                  } / 10
-                </span>
-              </div>
 
-            </div>
-          </div>
+  filtered.sort(
+    (a, b) =>
+      String(
+        b.date || ""
+      ).localeCompare(
+        String(
+          a.date || ""
+        )
+      )
+  );
+
+
+  if (
+    !filtered.length
+  ) {
+
+    container.innerHTML = `
+
+      <div class="empty">
+
+        <div class="empty-icon">
+          ♡
+        </div>
+
+        <div class="empty-title">
+          まだ思い出がありません
+        </div>
+
+        <div class="empty-text">
+          行った場所や、そのときの気持ちを<br>
+          少しずつ残していきましょう。
+        </div>
+
+      </div>
+
+    `;
+
+    return;
+  }
+
+
+  container.innerHTML = "";
+
+
+  for (
+    const memory
+    of filtered
+  ) {
+
+    const photos =
+      await getPhotosForMemory(
+        memory.id
+      );
+
+
+    const card =
+      document.createElement(
+        "article"
+      );
+
+    card.className =
+      "memory-card";
+
+
+    const main =
+      document.createElement(
+        "div"
+      );
+
+    main.className =
+      "memory-card-main";
+
+
+    main.innerHTML = `
+
+      <div class="memory-card-top">
+
+        <div class="memory-card-date">
+          ${escapeHtml(
+            formatDate(
+              memory.date
+            )
+          )}
+        </div>
+
+        <div class="memory-place-wrap">
+
+          <h3 class="memory-place">
+            ${escapeHtml(
+              memory.place
+            )}
+          </h3>
 
           ${
-            memory.comment
+            memory.genre
               ? `
-                <div class="memory-comment">
+                <div class="memory-genre">
                   ${escapeHtml(
-                    memory.comment
+                    memory.genre
                   )}
                 </div>
               `
               : ""
           }
 
-          <div class="memory-meta">
+          <div class="rating">
+
+            ${formatStars(
+              memory.rating
+            )}
+
+            <span class="rating-number">
+              ${
+                Number(
+                  memory.rating
+                ) || 0
+              } / 10
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      ${
+        memory.comment
+          ? `
+            <div class="memory-comment">
+              ${escapeHtml(
+                memory.comment
+              )}
+            </div>
+          `
+          : ""
+      }
+
+      <div class="memory-meta">
+
+        ${
+          hasLocation(memory)
+            ? `
+              <span class="meta-chip">
+                📍 位置情報あり
+              </span>
+            `
+            : ""
+        }
+
+        ${
+          photos.length
+            ? `
+              <span class="meta-chip">
+                📷 ${photos.length}枚
+              </span>
+            `
+            : ""
+        }
+
+        ${
+          memory.price
+            ? `
+              <span class="meta-chip">
+                ¥${Number(
+                  memory.price
+                ).toLocaleString()}
+              </span>
+            `
+            : ""
+        }
+
+      </div>
+
+    `;
+
+
+    card.appendChild(
+      main
+    );
+
+
+    if (
+      photos.length
+    ) {
+
+      const photo =
+        photos[0];
+
+
+      const image =
+        document.createElement(
+          "img"
+        );
+
+
+      image.className =
+        "memory-card-photo";
+
+
+      const url =
+        URL.createObjectURL(
+          photo.blob
+        );
+
+
+      image.src =
+        url;
+
+
+      image.onload =
+        () => {
+          URL.revokeObjectURL(
+            url
+          );
+        };
+
+
+      card.appendChild(
+        image
+      );
+    }
+
+
+    const actions =
+      document.createElement(
+        "div"
+      );
+
+    actions.className =
+      "card-actions";
+
+
+    actions.innerHTML = `
+
+      <button class="card-action">
+        詳細
+      </button>
+
+      <button class="card-action">
+        編集
+      </button>
+
+      <button class="card-action">
+        削除
+      </button>
+
+    `;
+
+
+    const buttons =
+      actions.querySelectorAll(
+        "button"
+      );
+
+
+    buttons[0].onclick =
+      () => {
+        openDetail(
+          memory.id
+        );
+      };
+
+
+    buttons[1].onclick =
+      () => {
+        openEditMemory(
+          memory.id
+        );
+      };
+
+
+    buttons[2].onclick =
+      () => {
+        deleteMemory(
+          memory.id
+        );
+      };
+
+
+    card.appendChild(
+      actions
+    );
+
+
+    container.appendChild(
+      card
+    );
+  }
+}
+
+
+/* =========================================================
+   DETAIL
+========================================================= */
+
+async function openDetail(
+  id
+) {
+
+  try {
+
+    const memory =
+      await getMemory(id);
+
+
+    if (!memory) {
+
+      showToast(
+        "思い出のデータが見つかりません"
+      );
+
+      return;
+    }
+
+
+    const photos =
+      await getPhotosForMemory(
+        id
+      );
+
+
+    const container =
+      document.getElementById(
+        "detailContent"
+      );
+
+
+    container.innerHTML = `
+
+      <div class="detail-card">
+
+        ${
+          photos.length
+            ? `
+              <div
+                id="detailPhotos"
+                class="detail-photo-grid"
+              ></div>
+            `
+            : ""
+        }
+
+        <div class="detail-body">
+
+          <h2 class="detail-place">
+            ${escapeHtml(
+              memory.place
+            )}
+          </h2>
+
+          <div class="detail-date">
+            ${escapeHtml(
+              formatDate(
+                memory.date
+              )
+            )}
+          </div>
+
+          <div class="rating">
+
+            ${formatStars(
+              memory.rating
+            )}
+
+            <span class="rating-number">
+              ${
+                Number(
+                  memory.rating
+                ) || 0
+              } / 10
+            </span>
+
+          </div>
+
+
+          ${
+            memory.genre
+              ? `
+                <div class="detail-section">
+
+                  <div class="detail-section-title">
+                    ジャンル
+                  </div>
+
+                  <div>
+                    ${escapeHtml(
+                      memory.genre
+                    )}
+                  </div>
+
+                </div>
+              `
+              : ""
+          }
+
+
+          ${
+            memory.price
+              ? `
+                <div class="detail-section">
+
+                  <div class="detail-section-title">
+                    金額
+                  </div>
+
+                  <div>
+                    ¥${Number(
+                      memory.price
+                    ).toLocaleString()}
+                  </div>
+
+                </div>
+              `
+              : ""
+          }
+
+
+          ${
+            memory.address
+              ? `
+                <div class="detail-section">
+
+                  <div class="detail-section-title">
+                    場所
+                  </div>
+
+                  <div class="detail-location">
+                    ${escapeHtml(
+                      memory.address
+                    )}
+                  </div>
+
+                </div>
+              `
+              : ""
+          }
+
+
+          ${
+            memory.comment
+              ? `
+                <div class="detail-section">
+
+                  <div class="detail-section-title">
+                    思い出
+                  </div>
+
+                  <div class="detail-comment">
+                    ${escapeHtml(
+                      memory.comment
+                    )}
+                  </div>
+
+                </div>
+              `
+              : ""
+          }
+
+
+          ${
+            hasLocation(memory)
+              ? `
+                <div class="detail-section">
+
+                  <div class="detail-section-title">
+                    位置情報
+                  </div>
+
+                  <div class="detail-location">
+                    📍 位置情報あり
+                  </div>
+
+                </div>
+              `
+              : ""
+          }
+
+
+          <div class="detail-actions">
 
             ${
               hasLocation(memory)
                 ? `
-                  <span class="meta-chip">
-                    📍 位置情報あり
-                  </span>
+                  <button
+                    class="secondary-button"
+                    onclick="showMemoryOnMap('${memory.id}')"
+                  >
+                    🗺️ 地図で見る
+                  </button>
                 `
                 : ""
             }
 
-            ${
-              photos.length
-                ? `
-                  <span class="meta-chip">
-                    📷 ${photos.length}枚
-                  </span>
-                `
-                : ""
-            }
-
-            ${
-              memory.price
-                ? `
-                  <span class="meta-chip">
-                    ¥${Number(
-                      memory.price
-                    ).toLocaleString()}
-                  </span>
-                `
-                : ""
-            }
+            <button
+              class="secondary-button"
+              onclick="openEditMemory('${memory.id}')"
+            >
+              ✏️ 編集
+            </button>
 
           </div>
-        `;
 
-        card.appendChild(main);
+        </div>
 
-        if (photoHtml) {
-          const photoContainer =
+      </div>
+
+    `;
+
+
+    if (
+      photos.length
+    ) {
+
+      const grid =
+        document.getElementById(
+          "detailPhotos"
+        );
+
+
+      photos.forEach(
+        photo => {
+
+          const img =
             document.createElement(
-              "div"
+              "img"
             );
 
-          photoContainer.innerHTML =
-            photoHtml;
 
-          card.appendChild(
-            photoContainer
-          );
-        }
-
-        const actions =
-          document.createElement(
-            "div"
-          );
-
-        actions.className =
-          "card-actions";
-
-        actions.innerHTML = `
-          <button class="card-action">
-            詳細
-          </button>
-
-          <button class="card-action">
-            編集
-          </button>
-
-          <button class="card-action">
-            削除
-          </button>
-        `;
-
-        const buttons =
-          actions.querySelectorAll(
-            "button"
-          );
-
-        buttons[0].onclick = () => {
-          openDetail(memory.id);
-        };
-
-        buttons[1].onclick = () => {
-          openEditMemory(memory.id);
-        };
-
-        buttons[2].onclick = () => {
-          deleteMemory(memory.id);
-        };
-
-        card.appendChild(actions);
-
-        container.appendChild(card);
-      }
-    }
-
-    /* =========================================================
-       Detail
-    ========================================================= */
-
-    async function openDetail(id) {
-      try {
-        const memory =
-          await getMemory(id);
-
-        if (!memory) {
-          showToast(
-            "思い出のデータが見つかりません"
-          );
-
-          return;
-        }
-
-        const photos =
-          await getPhotosForMemory(
-            id
-          );
-
-        const container =
-          document.getElementById(
-            "detailContent"
-          );
-
-        container.innerHTML = `
-          <div class="detail-card">
-
-            ${
-              photos.length
-                ? `
-                  <div
-                    id="detailPhotos"
-                    class="detail-photo-grid"
-                  ></div>
-                `
-                : ""
-            }
-
-            <div class="detail-body">
-
-              <h2 class="detail-place">
-                ${escapeHtml(
-                  memory.place
-                )}
-              </h2>
-
-              <div class="detail-date">
-                ${escapeHtml(
-                  formatDate(memory.date)
-                )}
-              </div>
-
-              <div class="rating">
-                ${formatRating(
-                  Number(memory.rating) || 0
-                )}
-
-                <span class="rating-number">
-                  ${
-                    Number(memory.rating) || 0
-                  } / 10
-                </span>
-              </div>
-
-              ${
-                memory.genre
-                  ? `
-                    <div class="detail-section">
-                      <div class="detail-section-title">
-                        ジャンル
-                      </div>
-                      <div>
-                        ${escapeHtml(
-                          memory.genre
-                        )}
-                      </div>
-                    </div>
-                  `
-                  : ""
-              }
-
-              ${
-                memory.price
-                  ? `
-                    <div class="detail-section">
-                      <div class="detail-section-title">
-                        金額
-                      </div>
-                      <div>
-                        ¥${Number(
-                          memory.price
-                        ).toLocaleString()}
-                      </div>
-                    </div>
-                  `
-                  : ""
-              }
-
-              ${
-                memory.address
-                  ? `
-                    <div class="detail-section">
-                      <div class="detail-section-title">
-                        場所
-                      </div>
-                      <div class="detail-location">
-                        ${escapeHtml(
-                          memory.address
-                        )}
-                      </div>
-                    </div>
-                  `
-                  : ""
-              }
-
-              ${
-                memory.comment
-                  ? `
-                    <div class="detail-section">
-                      <div class="detail-section-title">
-                        思い出
-                      </div>
-                      <div class="detail-comment">
-                        ${escapeHtml(
-                          memory.comment
-                        )}
-                      </div>
-                    </div>
-                  `
-                  : ""
-              }
-
-              ${
-                hasLocation(memory)
-                  ? `
-                    <div class="detail-section">
-                      <div class="detail-section-title">
-                        位置情報
-                      </div>
-
-                      <div class="detail-location">
-                        📍 位置情報あり
-                      </div>
-                    </div>
-                  `
-                  : ""
-              }
-
-              <div class="detail-actions">
-
-                ${
-                  hasLocation(memory)
-                    ? `
-                      <button
-                        class="secondary-button"
-                        onclick="showMemoryOnMap('${memory.id}')"
-                      >
-                        🗺️ 地図で見る
-                      </button>
-                    `
-                    : ""
-                }
-
-                <button
-                  class="secondary-button"
-                  onclick="openEditMemory('${memory.id}')"
-                >
-                  ✏️ 編集
-                </button>
-
-              </div>
-
-            </div>
-          </div>
-        `;
-
-        if (photos.length) {
-          const grid =
-            document.getElementById(
-              "detailPhotos"
+          const url =
+            URL.createObjectURL(
+              photo.blob
             );
 
-          photos.forEach(photo => {
-            const img =
-              document.createElement(
-                "img"
+
+          img.src =
+            url;
+
+
+          img.onload =
+            () => {
+              URL.revokeObjectURL(
+                url
               );
-
-            const url =
-              URL.createObjectURL(
-                photo.blob
-              );
-
-            img.src = url;
-
-            img.onload = () => {
-              URL.revokeObjectURL(url);
             };
 
-            grid.appendChild(img);
-          });
+
+          grid.appendChild(
+            img
+          );
         }
-
-        openScreen("detail");
-
-      } catch (error) {
-        console.error(error);
-
-        showToast(
-          "詳細の読み込みに失敗しました"
-        );
-      }
-    }
-
-    /* =========================================================
-       Delete
-    ========================================================= */
-
-    async function deleteMemory(id) {
-      const memory =
-        await getMemory(id);
-
-      if (!memory) {
-        showToast(
-          "データが見つかりません"
-        );
-
-        return;
-      }
-
-      const confirmed =
-        confirm(
-          `「${memory.place}」を削除しますか？\n写真も削除されます。`
-        );
-
-      if (!confirmed) {
-        return;
-      }
-
-      try {
-        await deleteMemoryRecord(id);
-
-        showToast(
-          "思い出を削除しました"
-        );
-
-        renderMemoryList();
-
-      } catch (error) {
-        console.error(error);
-
-        showToast(
-          "削除に失敗しました"
-        );
-      }
-    }
-
-    /* =========================================================
-       Map
-    ========================================================= */
-
-    function initializeMap() {
-      if (map) {
-        return;
-      }
-
-      map = L.map("map", {
-        zoomControl: false,
-        attributionControl: true
-      });
-
-      /*
-       * Carto Positron
-       *
-       * OSM標準より淡く、すっきりした地図。
-       */
-
-      L.tileLayer(
-        "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
-        {
-          maxZoom: 20,
-          attribution:
-            '&copy; OpenStreetMap contributors &copy; CARTO'
-        }
-      ).addTo(map);
-
-      L.control
-        .zoom({
-          position: "bottomright"
-        })
-        .addTo(map);
-
-      map.setView(
-        [35.681236, 139.767125],
-        5
       );
     }
 
-    function createPinIcon() {
-      return L.divIcon({
-        className: "",
-        html: `
-          <div class="custom-pin"></div>
-        `,
-        iconSize: [34, 34],
-        iconAnchor: [17, 34],
-        popupAnchor: [0, -30]
-      });
-    }
 
-    async function renderMapMarkers() {
+    openScreen(
+      "detail"
+    );
+
+  } catch (error) {
+
+    console.error(
+      error
+    );
+
+    showToast(
+      "詳細の読み込みに失敗しました"
+    );
+  }
+}
+
+
+/* =========================================================
+   DELETE
+========================================================= */
+
+async function deleteMemory(
+  id
+) {
+
+  const memory =
+    await getMemory(id);
+
+
+  if (!memory) {
+
+    showToast(
+      "データが見つかりません"
+    );
+
+    return;
+  }
+
+
+  const confirmed =
+    confirm(
+      `「${memory.place}」を削除しますか？\n写真も削除されます。`
+    );
+
+
+  if (!confirmed) {
+    return;
+  }
+
+
+  try {
+
+    await deleteMemoryRecord(
+      id
+    );
+
+
+    showToast(
+      "思い出を削除しました"
+    );
+
+
+    await renderMemoryList();
+
+  } catch (error) {
+
+    console.error(
+      error
+    );
+
+    showToast(
+      "削除に失敗しました"
+    );
+  }
+}
+
+
+/* =========================================================
+   MAP
+========================================================= */
+
+function initializeMap() {
+
+  if (map) {
+    return;
+  }
+
+
+  map =
+    L.map(
+      "map",
+      {
+        zoomControl: false
+      }
+    );
+
+
+  /*
+   * 前のOpenStreetMap版に戻す。
+   */
+
+  L.tileLayer(
+    "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+    {
+      maxZoom: 19,
+
+      attribution:
+        "&copy; OpenStreetMap contributors"
+    }
+  ).addTo(map);
+
+
+  L.control
+    .zoom({
+      position:
+        "bottomright"
+    })
+    .addTo(map);
+
+
+  map.setView(
+    [
+      35.681236,
+      139.767125
+    ],
+    5
+  );
+}
+
+
+function createPinIcon() {
+
+  return L.divIcon({
+
+    className: "",
+
+    html: `
+      <div class="custom-pin"></div>
+    `,
+
+    iconSize: [
+      34,
+      34
+    ],
+
+    iconAnchor: [
+      17,
+      34
+    ],
+
+    popupAnchor: [
+      0,
+      -30
+    ]
+  });
+}
+
+
+async function renderMapMarkers() {
+
+  if (!map) {
+    return;
+  }
+
+
+  mapMarkers.forEach(
+    marker => {
+      map.removeLayer(
+        marker
+      );
+    }
+  );
+
+
+  mapMarkers = [];
+
+
+  const memories =
+    await getAllMemories();
+
+
+  const located =
+    memories.filter(
+      memory =>
+        hasLocation(
+          memory
+        )
+    );
+
+
+  if (!located.length) {
+    return;
+  }
+
+
+  const bounds = [];
+
+
+  for (
+    const memory
+    of located
+  ) {
+
+    const lat =
+      Number(
+        memory.latitude
+      );
+
+    const lng =
+      Number(
+        memory.longitude
+      );
+
+
+    const marker =
+      L.marker(
+        [lat, lng],
+        {
+          icon:
+            createPinIcon()
+        }
+      );
+
+
+    marker.bindPopup(`
+
+      <div>
+
+        <strong>
+          ${escapeHtml(
+            memory.place
+          )}
+        </strong>
+
+        <br>
+
+        <span>
+          ${formatStars(
+            memory.rating
+          )}
+          ${
+            Number(
+              memory.rating
+            ) || 0
+          } / 10
+        </span>
+
+        <br><br>
+
+        <button
+          onclick="openDetail('${memory.id}')"
+          style="
+            border:none;
+            border-radius:8px;
+            padding:7px 10px;
+            background:#d4937a;
+            color:white;
+          "
+        >
+          詳細を見る
+        </button>
+
+      </div>
+
+    `);
+
+
+    marker.addTo(
+      map
+    );
+
+
+    mapMarkers.push(
+      marker
+    );
+
+
+    bounds.push([
+      lat,
+      lng
+    ]);
+  }
+
+
+  if (
+    bounds.length === 1
+  ) {
+
+    map.setView(
+      bounds[0],
+      15
+    );
+
+  } else {
+
+    map.fitBounds(
+      bounds,
+      {
+        padding: [
+          40,
+          40
+        ]
+      }
+    );
+  }
+}
+
+
+async function fitAllMarkers() {
+
+  await renderMapMarkers();
+}
+
+
+function moveToCurrentLocation() {
+
+  if (
+    !navigator.geolocation
+  ) {
+
+    showToast(
+      "位置情報を利用できません"
+    );
+
+    return;
+  }
+
+
+  navigator.geolocation.getCurrentPosition(
+
+    position => {
+
       if (!map) {
         return;
       }
 
-      mapMarkers.forEach(marker => {
-        map.removeLayer(marker);
-      });
 
-      mapMarkers = [];
+      map.setView(
+        [
+          position.coords.latitude,
+          position.coords.longitude
+        ],
+        16
+      );
 
-      const memories =
-        await getAllMemories();
 
-      const locatedMemories =
-        memories.filter(
-          memory =>
-            hasLocation(memory)
-        );
-
-      if (!locatedMemories.length) {
-        return;
-      }
-
-      const bounds = [];
-
-      for (const memory of locatedMemories) {
-        const lat =
-          Number(memory.latitude);
-
-        const lng =
-          Number(memory.longitude);
-
-        const marker =
-          L.marker(
-            [lat, lng],
-            {
-              icon:
-                createPinIcon()
-            }
-          );
-
-        marker.bindPopup(`
-          <div>
-            <strong>
-              ${escapeHtml(
-                memory.place
-              )}
-            </strong>
-
-            <br>
-
-            <span>
-              ${formatRating(
-                Number(memory.rating) || 0
-              )}
-              ${
-                Number(memory.rating) || 0
-              } / 10
-            </span>
-
-            <br><br>
-
-            <button
-              onclick="openDetail('${memory.id}')"
-              style="
-                border:none;
-                border-radius:8px;
-                padding:7px 10px;
-                background:#d4937a;
-                color:white;
-              "
-            >
-              詳細を見る
-            </button>
-          </div>
-        `);
-
-        marker.addTo(map);
-
-        mapMarkers.push(marker);
-
-        bounds.push([lat, lng]);
-      }
-
-      if (bounds.length === 1) {
-        map.setView(
-          bounds[0],
-          15
-        );
-      } else {
-        map.fitBounds(
-          bounds,
-          {
-            padding: [40, 40]
-          }
-        );
-      }
-    }
-
-    async function fitAllMarkers() {
-      await renderMapMarkers();
-    }
-
-    function moveToCurrentLocation() {
-      if (
-        !navigator.geolocation
-      ) {
-        showToast(
-          "位置情報を利用できません"
-        );
-
-        return;
-      }
-
-      navigator.geolocation.getCurrentPosition(
-        position => {
-          if (!map) {
-            return;
-          }
-
-          map.setView(
-            [
-              position.coords.latitude,
-              position.coords.longitude
-            ],
-            16
-          );
-
-          L.circleMarker(
-            [
-              position.coords.latitude,
-              position.coords.longitude
-            ],
-            {
-              radius: 7,
-              color: "#758d77",
-              fillColor: "#758d77",
-              fillOpacity: 0.8
-            }
-          )
-            .addTo(map)
-            .bindPopup(
-              "現在地"
-            )
-            .openPopup();
-        },
-
-        () => {
-          showToast(
-            "現在地を取得できませんでした"
-          );
+      L.circleMarker(
+        [
+          position.coords.latitude,
+          position.coords.longitude
+        ],
+        {
+          radius: 7,
+          color: "#758d77",
+          fillColor: "#758d77",
+          fillOpacity: 0.8
         }
+      )
+        .addTo(map)
+        .bindPopup(
+          "現在地"
+        )
+        .openPopup();
+
+    },
+
+    () => {
+
+      showToast(
+        "現在地を取得できませんでした"
       );
     }
+  );
+}
 
-    async function showMemoryOnMap(id) {
-      const memory =
-        await getMemory(id);
 
-      if (!memory) {
-        showToast(
-          "データが見つかりません"
-        );
+async function showMemoryOnMap(
+  id
+) {
 
+  const memory =
+    await getMemory(id);
+
+
+  if (!memory) {
+
+    showToast(
+      "データが見つかりません"
+    );
+
+    return;
+  }
+
+
+  if (
+    !hasLocation(memory)
+  ) {
+
+    showToast(
+      "この思い出には位置情報がありません"
+    );
+
+    return;
+  }
+
+
+  openScreen(
+    "map"
+  );
+
+
+  setTimeout(
+    () => {
+
+      if (!map) {
         return;
       }
 
-      if (!hasLocation(memory)) {
-        showToast(
-          "この思い出には位置情報がありません"
+
+      map.setView(
+        [
+          Number(
+            memory.latitude
+          ),
+          Number(
+            memory.longitude
+          )
+        ],
+        16
+      );
+
+
+      const marker =
+        mapMarkers.find(
+          marker => {
+
+            const latLng =
+              marker.getLatLng();
+
+
+            return (
+              Math.abs(
+                latLng.lat -
+                  Number(
+                    memory.latitude
+                  )
+              ) < 0.000001 &&
+
+              Math.abs(
+                latLng.lng -
+                  Number(
+                    memory.longitude
+                  )
+              ) < 0.000001
+            );
+          }
         );
 
-        return;
+
+      if (marker) {
+        marker.openPopup();
       }
 
-      openScreen("map");
+    },
+    300
+  );
+}
 
-      setTimeout(() => {
-        if (!map) {
-          return;
-        }
 
-        map.setView(
-          [
-            Number(memory.latitude),
-            Number(memory.longitude)
-          ],
-          16
-        );
+/* =========================================================
+   FILTER
+========================================================= */
 
-        const marker =
-          mapMarkers.find(
-            marker => {
-              const latLng =
-                marker.getLatLng();
+function toggleFilters() {
 
-              return (
-                Math.abs(
-                  latLng.lat -
-                    Number(memory.latitude)
-                ) < 0.000001 &&
-                Math.abs(
-                  latLng.lng -
-                    Number(memory.longitude)
-                ) < 0.000001
-              );
-            }
-          );
+  document
+    .getElementById(
+      "filters"
+    )
+    .classList.toggle(
+      "open"
+    );
+}
 
-        if (marker) {
-          marker.openPopup();
-        }
-      }, 250);
+
+/* =========================================================
+   STORAGE STATUS
+========================================================= */
+
+async function renderStorageStatus() {
+
+  const memories =
+    await getAllMemories();
+
+
+  let photoCount = 0;
+
+
+  for (
+    const memory
+    of memories
+  ) {
+
+    const photos =
+      await getPhotosForMemory(
+        memory.id
+      );
+
+    photoCount +=
+      photos.length;
+  }
+
+
+  const locationCount =
+    memories.filter(
+      memory =>
+        hasLocation(
+          memory
+        )
+    ).length;
+
+
+  document.getElementById(
+    "storageStatus"
+  ).innerHTML = `
+
+    思い出：${memories.length}件<br>
+
+    写真：${photoCount}枚<br>
+
+    位置情報あり：${locationCount}件
+
+  `;
+}
+
+
+/* =========================================================
+   CLOSE SUGGESTION WHEN TAPPING OUTSIDE
+========================================================= */
+
+document.addEventListener(
+  "click",
+  event => {
+
+    const searchArea =
+      document.querySelector(
+        ".address-search"
+      );
+
+
+    if (
+      searchArea &&
+      !searchArea.contains(
+        event.target
+      )
+    ) {
+
+      hideSuggestions();
     }
+  }
+);
 
-    /* =========================================================
-       Filters
-    ========================================================= */
 
-    function toggleFilters() {
-      document
-        .getElementById("filters")
-        .classList.toggle("open");
-    }
+/* =========================================================
+   INITIALIZE
+========================================================= */
 
-    /* =========================================================
-       Storage status
-    ========================================================= */
+async function initializeApp() {
 
-    async function renderStorageStatus() {
-      const memories =
-        await getAllMemories();
+  try {
 
-      let photoCount = 0;
+    await openDatabase();
 
-      for (const memory of memories) {
-        const photos =
-          await getPhotosForMemory(
-            memory.id
-          );
+    await migrateLocalStorage();
 
-        photoCount += photos.length;
-      }
+    buildStarRating();
 
-      const locationCount =
-        memories.filter(
-          memory =>
-            hasLocation(memory)
-        ).length;
+    resetForm();
 
-      document.getElementById(
-        "storageStatus"
-      ).innerHTML = `
-        思い出：${memories.length}件<br>
-        写真：${photoCount}枚<br>
-        位置情報あり：${locationCount}件
-      `;
-    }
+    await renderMemoryList();
 
-    /* =========================================================
-       Initialization
-    ========================================================= */
+  } catch (error) {
 
-    async function initializeApp() {
-      try {
-        await openDatabase();
+    console.error(
+      error
+    );
 
-        await migrateLocalStorage();
+    alert(
+      "データベースの初期化に失敗しました。\nブラウザを再読み込みしてください。"
+    );
+  }
+}
 
-        buildRatingSelector();
 
-        resetForm();
+initializeApp();
+</script>
 
-        await renderMemoryList();
-
-      } catch (error) {
-        console.error(error);
-
-        alert(
-          "データベースの初期化に失敗しました。\n" +
-          "ブラウザを再読み込みしてください。"
-        );
-      }
-    }
-
-    initializeApp();
-  </script>
 </body>
 </html>
