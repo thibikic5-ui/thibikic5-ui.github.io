@@ -1,0 +1,3976 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+  >
+
+  <meta name="theme-color" content="#f8f6f2">
+
+  <title>My Memory Map</title>
+
+  <!-- Leaflet -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  />
+
+  <style>
+    /* =========================================================
+       Base
+    ========================================================= */
+
+    :root {
+      --bg: #f8f6f2;
+      --surface: #ffffff;
+      --surface-soft: #f3f0eb;
+
+      --text: #3f3a36;
+      --text-soft: #817a73;
+
+      --accent: #d99a9a;
+      --accent-dark: #bf7f80;
+      --accent-soft: #f5dddd;
+
+      --green: #9eb8a4;
+      --green-soft: #e4eee7;
+
+      --border: #ebe5de;
+
+      --danger: #d97878;
+
+      --shadow:
+        0 8px 30px rgba(70, 60, 50, 0.07);
+
+      --radius: 22px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100%;
+      background: var(--bg);
+      color: var(--text);
+
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Helvetica Neue",
+        "Hiragino Kaku Gothic ProN",
+        "Yu Gothic",
+        YuGothic,
+        Meiryo,
+        sans-serif;
+    }
+
+    body {
+      padding-bottom: calc(90px + env(safe-area-inset-bottom));
+    }
+
+    button,
+    input,
+    textarea,
+    select {
+      font: inherit;
+    }
+
+    button {
+      border: 0;
+      cursor: pointer;
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: #fff;
+      color: var(--text);
+      padding: 13px 14px;
+      outline: none;
+      transition: 0.2s;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(217, 154, 154, 0.12);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+
+    /* =========================================================
+       App
+    ========================================================= */
+
+    .app {
+      max-width: 760px;
+      margin: 0 auto;
+      min-height: 100vh;
+    }
+
+    .screen {
+      display: none;
+      padding: 24px 18px 30px;
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    /* =========================================================
+       Header
+    ========================================================= */
+
+    .page-header {
+      padding: 12px 4px 22px;
+    }
+
+    .page-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .eyebrow {
+      font-size: 12px;
+      color: var(--text-soft);
+      letter-spacing: 0.12em;
+      margin-bottom: 6px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 28px;
+      letter-spacing: 0.02em;
+      font-weight: 700;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 22px;
+    }
+
+    h3 {
+      margin: 0;
+      font-size: 17px;
+    }
+
+    .subtitle {
+      margin: 7px 0 0;
+      color: var(--text-soft);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    /* =========================================================
+       Buttons
+    ========================================================= */
+
+    .icon-button {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: var(--surface);
+      color: var(--text);
+      box-shadow: var(--shadow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .primary-button {
+      width: 100%;
+      padding: 15px 18px;
+      border-radius: 16px;
+      background: var(--accent);
+      color: white;
+      font-weight: 700;
+      box-shadow: 0 8px 20px rgba(191, 127, 128, 0.20);
+    }
+
+    .primary-button:active {
+      transform: translateY(1px);
+    }
+
+    .secondary-button {
+      width: 100%;
+      padding: 14px 18px;
+      border-radius: 16px;
+      background: var(--surface-soft);
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .danger-button {
+      width: 100%;
+      padding: 14px 18px;
+      border-radius: 16px;
+      background: #f8e3e3;
+      color: var(--danger);
+      font-weight: 600;
+    }
+
+    .small-button {
+      padding: 9px 12px;
+      border-radius: 12px;
+      background: var(--surface-soft);
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    /* =========================================================
+       Home
+    ========================================================= */
+
+    .hero-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+      margin-bottom: 18px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-card::after {
+      content: "✿";
+      position: absolute;
+      right: 18px;
+      top: 12px;
+      color: var(--accent-soft);
+      font-size: 50px;
+      transform: rotate(10deg);
+    }
+
+    .hero-title {
+      font-size: 19px;
+      font-weight: 700;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-text {
+      color: var(--text-soft);
+      font-size: 13px;
+      line-height: 1.7;
+      margin-top: 7px;
+      position: relative;
+      z-index: 1;
+      max-width: 80%;
+    }
+
+    .search-box {
+      position: relative;
+      margin-bottom: 14px;
+    }
+
+    .search-box input {
+      padding-left: 43px;
+      background: rgba(255,255,255,0.9);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-soft);
+    }
+
+    .filter-row {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+      margin-bottom: 18px;
+    }
+
+    .filter-row select {
+      width: auto;
+      min-width: 120px;
+      padding: 10px 12px;
+      flex-shrink: 0;
+      background: white;
+    }
+
+    /* =========================================================
+       Memory Card
+    ========================================================= */
+
+    .memory-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .memory-card {
+      background: var(--surface);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      cursor: pointer;
+      transition: transform 0.15s;
+    }
+
+    .memory-card:active {
+      transform: scale(0.99);
+    }
+
+    .memory-card-photo {
+      width: 100%;
+      height: 190px;
+      object-fit: cover;
+      display: block;
+      background: var(--surface-soft);
+    }
+
+    .memory-card-no-photo {
+      height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background:
+        linear-gradient(
+          135deg,
+          #f7ecec,
+          #f2eee7
+        );
+      color: var(--text-soft);
+      font-size: 28px;
+    }
+
+    .memory-card-body {
+      padding: 16px;
+    }
+
+    .memory-card-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .memory-place {
+      font-weight: 700;
+      font-size: 17px;
+    }
+
+    .memory-date {
+      color: var(--text-soft);
+      font-size: 12px;
+      margin-top: 5px;
+    }
+
+    .stars {
+      color: #e5aa70;
+      letter-spacing: 1px;
+      white-space: nowrap;
+    }
+
+    .memory-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 11px;
+    }
+
+    .tag {
+      background: var(--surface-soft);
+      border-radius: 999px;
+      padding: 5px 9px;
+      font-size: 11px;
+      color: var(--text-soft);
+    }
+
+    .location-tag {
+      background: var(--green-soft);
+      color: #66816d;
+    }
+
+    .memory-comment {
+      margin-top: 12px;
+      color: var(--text-soft);
+      font-size: 13px;
+      line-height: 1.65;
+
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 55px 20px;
+      color: var(--text-soft);
+    }
+
+    .empty-icon {
+      font-size: 40px;
+      margin-bottom: 12px;
+    }
+
+    /* =========================================================
+       Form
+    ========================================================= */
+
+    .form-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 18px;
+      box-shadow: var(--shadow);
+    }
+
+    .form-group {
+      margin-bottom: 19px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .required {
+      color: var(--accent-dark);
+      font-size: 10px;
+      margin-left: 4px;
+    }
+
+    .rating-input {
+      display: flex;
+      gap: 8px;
+    }
+
+    .rating-star {
+      width: 45px;
+      height: 45px;
+      border-radius: 14px;
+      background: var(--surface-soft);
+      color: #d8d0c7;
+      font-size: 23px;
+    }
+
+    .rating-star.selected {
+      background: #fbecda;
+      color: #e4a35f;
+    }
+
+    .location-box {
+      border-radius: 16px;
+      padding: 14px;
+      background: var(--green-soft);
+      margin-top: 10px;
+    }
+
+    .location-status {
+      font-size: 12px;
+      color: #66816d;
+      line-height: 1.5;
+    }
+
+    .coordinates {
+      font-size: 11px;
+      color: #7c9282;
+      margin-top: 5px;
+    }
+
+    /* =========================================================
+       Photos
+    ========================================================= */
+
+    .photo-picker {
+      display: block;
+      width: 100%;
+      padding: 18px;
+      border: 1.5px dashed #ddcfc6;
+      border-radius: 17px;
+      text-align: center;
+      background: #fcfaf8;
+      color: var(--text-soft);
+      cursor: pointer;
+    }
+
+    .photo-picker-icon {
+      font-size: 27px;
+      margin-bottom: 5px;
+    }
+
+    .photo-picker-text {
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .photo-picker-sub {
+      font-size: 11px;
+      margin-top: 4px;
+    }
+
+    .photo-input {
+      display: none;
+    }
+
+    .photo-preview-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .photo-preview-item {
+      position: relative;
+      aspect-ratio: 1;
+      border-radius: 13px;
+      overflow: hidden;
+      background: var(--surface-soft);
+    }
+
+    .photo-preview-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .photo-remove {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      background: rgba(40, 35, 30, 0.65);
+      color: white;
+      font-size: 13px;
+    }
+
+    /* =========================================================
+       Detail
+    ========================================================= */
+
+    .detail-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    .detail-main-photo {
+      width: 100%;
+      height: 280px;
+      object-fit: cover;
+      display: block;
+      background: var(--surface-soft);
+    }
+
+    .detail-photos {
+      display: flex;
+      overflow-x: auto;
+      gap: 9px;
+      padding: 12px 14px 0;
+    }
+
+    .detail-photo {
+      width: 90px;
+      height: 90px;
+      object-fit: cover;
+      border-radius: 13px;
+      flex-shrink: 0;
+    }
+
+    .detail-body {
+      padding: 20px;
+    }
+
+    .detail-place {
+      font-size: 25px;
+      font-weight: 700;
+    }
+
+    .detail-date {
+      color: var(--text-soft);
+      font-size: 12px;
+      margin-top: 7px;
+    }
+
+    .detail-rating {
+      margin-top: 10px;
+      font-size: 19px;
+    }
+
+    .detail-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 15px;
+    }
+
+    .detail-comment {
+      margin-top: 22px;
+      line-height: 1.9;
+      white-space: pre-wrap;
+      font-size: 14px;
+    }
+
+    .detail-actions {
+      display: flex;
+      gap: 9px;
+      margin-top: 24px;
+    }
+
+    .detail-actions button {
+      flex: 1;
+    }
+
+    /* =========================================================
+       Map
+    ========================================================= */
+
+    .map-wrapper {
+      position: relative;
+      height: calc(100vh - 155px);
+      min-height: 500px;
+      margin: -24px -18px -30px;
+      overflow: hidden;
+      background: #e9e6df;
+    }
+
+    #map {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* 地図UIをすっきりさせる */
+    .leaflet-control-zoom {
+      border: 0 !important;
+      box-shadow: 0 5px 18px rgba(50,45,40,0.10) !important;
+    }
+
+    .leaflet-control-zoom a {
+      border: 0 !important;
+      background: rgba(255,255,255,0.94) !important;
+      color: var(--text) !important;
+    }
+
+    .leaflet-control-attribution {
+      font-size: 9px !important;
+      background: rgba(255,255,255,0.75) !important;
+    }
+
+    .map-top-bar {
+      position: absolute;
+      z-index: 1000;
+      top: 14px;
+      left: 14px;
+      right: 14px;
+
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      pointer-events: none;
+    }
+
+    .map-title-card {
+      background: rgba(255,255,255,0.93);
+      backdrop-filter: blur(10px);
+      border-radius: 17px;
+      padding: 11px 14px;
+      box-shadow: 0 6px 25px rgba(50,45,40,0.10);
+      pointer-events: auto;
+    }
+
+    .map-title {
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .map-count {
+      color: var(--text-soft);
+      font-size: 10px;
+      margin-top: 2px;
+    }
+
+    .map-current-button {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.95);
+      box-shadow: 0 6px 25px rgba(50,45,40,0.12);
+      pointer-events: auto;
+      font-size: 19px;
+    }
+
+    /* カスタムピン */
+    .memory-pin {
+      width: 38px;
+      height: 38px;
+      border-radius: 50% 50% 50% 5px;
+      background: var(--accent);
+      border: 3px solid white;
+      box-shadow: 0 5px 14px rgba(70,50,45,0.22);
+      transform: rotate(-45deg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .memory-pin-inner {
+      transform: rotate(45deg);
+      color: white;
+      font-size: 16px;
+    }
+
+    .leaflet-popup-content-wrapper {
+      border-radius: 18px;
+      box-shadow: 0 10px 30px rgba(50,45,40,0.13);
+    }
+
+    .leaflet-popup-content {
+      margin: 13px 15px;
+    }
+
+    .popup-place {
+      font-weight: 700;
+      font-size: 15px;
+    }
+
+    .popup-date {
+      font-size: 10px;
+      color: var(--text-soft);
+      margin-top: 3px;
+    }
+
+    .popup-rating {
+      margin-top: 6px;
+      color: #e4a35f;
+      font-size: 13px;
+    }
+
+    .popup-button {
+      margin-top: 10px;
+      background: var(--surface-soft);
+      border-radius: 10px;
+      padding: 8px 10px;
+      font-size: 11px;
+      width: 100%;
+    }
+
+    /* =========================================================
+       Bottom Navigation
+    ========================================================= */
+
+    .bottom-nav {
+      position: fixed;
+      z-index: 3000;
+      left: 50%;
+      bottom: 0;
+      transform: translateX(-50%);
+
+      width: min(760px, 100%);
+
+      padding:
+        9px
+        14px
+        calc(9px + env(safe-area-inset-bottom));
+
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(18px);
+
+      border-top: 1px solid rgba(230,224,217,0.7);
+    }
+
+    .nav-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      align-items: center;
+    }
+
+    .nav-button {
+      background: transparent;
+      color: #9a928a;
+      padding: 6px 0;
+      font-size: 10px;
+      font-weight: 600;
+    }
+
+    .nav-icon {
+      font-size: 20px;
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .nav-button.active {
+      color: var(--accent-dark);
+    }
+
+    .nav-add {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      margin: -25px auto 0;
+      background: var(--accent);
+      color: white;
+      font-size: 26px;
+      box-shadow: 0 8px 20px rgba(191,127,128,0.28);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* =========================================================
+       Toast
+    ========================================================= */
+
+    .toast {
+      position: fixed;
+      z-index: 5000;
+      left: 50%;
+      bottom: 100px;
+      transform: translateX(-50%) translateY(15px);
+
+      background: rgba(50,45,40,0.92);
+      color: white;
+
+      padding: 11px 16px;
+      border-radius: 999px;
+
+      font-size: 12px;
+
+      opacity: 0;
+      pointer-events: none;
+      transition: 0.25s;
+      white-space: nowrap;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* =========================================================
+       Loading
+    ========================================================= */
+
+    .loading {
+      position: fixed;
+      z-index: 9999;
+      inset: 0;
+
+      display: none;
+      align-items: center;
+      justify-content: center;
+
+      background: rgba(248,246,242,0.85);
+      backdrop-filter: blur(5px);
+    }
+
+    .loading.show {
+      display: flex;
+    }
+
+    .loading-box {
+      background: white;
+      padding: 22px 28px;
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+
+    .loading-icon {
+      font-size: 28px;
+      animation: loading 1.2s infinite ease-in-out;
+    }
+
+    @keyframes loading {
+      0%,100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-6px);
+      }
+    }
+
+    /* =========================================================
+       Responsive
+    ========================================================= */
+
+    @media (min-width: 700px) {
+      .screen {
+        padding-left: 30px;
+        padding-right: 30px;
+      }
+
+      .map-wrapper {
+        margin-left: -30px;
+        margin-right: -30px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <!-- =======================================================
+       HOME
+  ======================================================== -->
+
+  <section id="homeScreen" class="screen active">
+
+    <header class="page-header">
+      <div class="eyebrow">MY MEMORY MAP</div>
+
+      <h1>思い出を、もう一度。</h1>
+
+      <p class="subtitle">
+        行った場所と、そのときの気持ちを<br>
+        そっと残しておこう。
+      </p>
+    </header>
+
+    <div class="hero-card">
+      <div class="hero-title">
+        今日までの思い出
+      </div>
+
+      <div class="hero-text">
+        大切だった場所も、何気ない一日も。<br>
+        あとから見返せるように残しておこう。
+      </div>
+    </div>
+
+    <div class="search-box">
+      <span class="search-icon">⌕</span>
+      <input
+        id="searchInput"
+        type="search"
+        placeholder="場所やコメントを検索"
+      >
+    </div>
+
+    <div class="filter-row">
+
+      <select id="genreFilter">
+        <option value="">すべてのジャンル</option>
+        <option value="カフェ">カフェ</option>
+        <option value="レストラン">レストラン</option>
+        <option value="旅行">旅行</option>
+        <option value="買い物">買い物</option>
+        <option value="公園">公園</option>
+        <option value="映画">映画</option>
+        <option value="その他">その他</option>
+      </select>
+
+      <select id="ratingFilter">
+        <option value="">すべての評価</option>
+        <option value="5">★★★★★</option>
+        <option value="4">★★★★以上</option>
+        <option value="3">★★★以上</option>
+        <option value="2">★★以上</option>
+        <option value="1">★以上</option>
+      </select>
+
+    </div>
+
+    <div id="memoryList" class="memory-list"></div>
+
+  </section>
+
+
+  <!-- =======================================================
+       REGISTER
+  ======================================================== -->
+
+  <section id="registerScreen" class="screen">
+
+    <header class="page-header">
+      <div class="page-header-row">
+        <div>
+          <div class="eyebrow">NEW MEMORY</div>
+          <h1 id="formTitle">思い出を残す</h1>
+        </div>
+
+        <button
+          class="icon-button"
+          onclick="showScreen('home')"
+        >
+          ×
+        </button>
+      </div>
+    </header>
+
+    <form id="memoryForm" class="form-card">
+
+      <input type="hidden" id="editId">
+
+      <!-- 場所 -->
+
+      <div class="form-group">
+
+        <label class="form-label">
+          場所
+          <span class="required">必須</span>
+        </label>
+
+        <input
+          id="place"
+          type="text"
+          placeholder="例：代官山 蔦屋書店"
+          required
+        >
+
+      </div>
+
+
+      <!-- 評価 -->
+
+      <div class="form-group">
+
+        <label class="form-label">
+          評価
+          <span class="required">必須</span>
+        </label>
+
+        <div class="rating-input">
+
+          <button type="button" class="rating-star" data-rating="1">★</button>
+          <button type="button" class="rating-star" data-rating="2">★</button>
+          <button type="button" class="rating-star" data-rating="3">★</button>
+          <button type="button" class="rating-star" data-rating="4">★</button>
+          <button type="button" class="rating-star" data-rating="5">★</button>
+
+        </div>
+
+        <input
+          id="rating"
+          type="hidden"
+          value="0"
+        >
+
+      </div>
+
+
+      <!-- 日付 -->
+
+      <div class="form-group">
+
+        <label class="form-label">
+          日付
+          <span class="required">必須</span>
+        </label>
+
+        <input
+          id="date"
+          type="datetime-local"
+          required
+        >
+
+      </div>
+
+
+      <!-- ジャンル -->
+
+      <div class="form-group">
+
+        <label class="form-label">
+          ジャンル
+        </label>
+
+        <select id="genre">
+
+          <option value="">選択してください</option>
+          <option value="カフェ">カフェ</option>
+          <option value="レストラン">レストラン</option>
+          <option value="旅行">旅行</option>
+          <option value="買い物">買い物</option>
+          <option value="公園">公園</option>
+          <option value="映画">映画</option>
+          <option value="その他">その他</option>
+
+        </select>
+
+      </div>
+
+
+      <!-- 金額 -->
+
+      <div class="form-group">
+
+        <label class="form-label">
+          金額
+        </label>
+
+        <input
+          id="price"
+          type="number"
+          inputmode="numeric"
+          min="0"
+          placeholder="例：3500"
+        >
+
+      </div>
+
+
+      <!-- 写真 -->
+
+      <div class="form-group">
+
+        <label class="form-label">
+          写真
+        </label>
+
+        <label class="photo-picker">
+
+          <div class="photo-picker-icon">
+            📷
+          </div>
+
+          <div class="photo-picker-text">
+            写真を追加
+          </div>
+
+          <div class="photo-picker-sub">
+            複数枚選択できます
+          </div>
+
+          <input
+            id="photoInput"
+            class="photo-input"
+            type="file"
+            accept="image/*"
+            multiple
+          >
+
+        </label>
+
+        <div
+          id="photoPreviewGrid"
+          class="photo-preview-grid"
+        ></div>
+
+      </div>
+
+
+      <!-- GPS -->
+
+      <div class="form-group">
+
+        <label class="form-label">
+          場所情報
+        </label>
+
+        <button
+          type="button"
+          class="secondary-button"
+          onclick="getCurrentLocation()"
+        >
+          📍 現在地を取得
+        </button>
+
+        <div
+          id="locationBox"
+          class="location-box"
+        >
+
+          <div
+            id="locationStatus"
+            class="location-status"
+          >
+            位置情報はまだ取得していません。
+          </div>
+
+          <div
+            id="coordinates"
+            class="coordinates"
+          ></div>
+
+        </div>
+
+        <input type="hidden" id="latitude">
+        <input type="hidden" id="longitude">
+
+      </div>
+
+
+      <!-- コメント -->
+
+      <div class="form-group">
+
+        <label class="form-label">
+          コメント
+        </label>
+
+        <textarea
+          id="comment"
+          placeholder="この日のことを自由に残そう。"
+        ></textarea>
+
+      </div>
+
+
+      <button
+        type="submit"
+        class="primary-button"
+      >
+        保存する
+      </button>
+
+    </form>
+
+  </section>
+
+
+  <!-- =======================================================
+       DETAIL
+  ======================================================== -->
+
+  <section id="detailScreen" class="screen">
+
+    <header class="page-header">
+
+      <div class="page-header-row">
+
+        <button
+          class="icon-button"
+          onclick="showScreen('home')"
+        >
+          ‹
+        </button>
+
+        <div style="flex:1"></div>
+
+        <button
+          id="detailEditButton"
+          class="small-button"
+        >
+          編集
+        </button>
+
+      </div>
+
+    </header>
+
+    <div id="detailContent"></div>
+
+  </section>
+
+
+  <!-- =======================================================
+       MAP
+  ======================================================== -->
+
+  <section id="mapScreen" class="screen">
+
+    <div class="map-wrapper">
+
+      <div class="map-top-bar">
+
+        <div class="map-title-card">
+
+          <div class="map-title">
+            思い出の地図
+          </div>
+
+          <div
+            id="mapCount"
+            class="map-count"
+          >
+            0か所
+          </div>
+
+        </div>
+
+        <button
+          class="map-current-button"
+          onclick="moveMapToCurrentLocation()"
+        >
+          ◎
+        </button>
+
+      </div>
+
+      <div id="map"></div>
+
+    </div>
+
+  </section>
+
+
+  <!-- =======================================================
+       NAVIGATION
+  ======================================================== -->
+
+  <nav class="bottom-nav">
+
+    <div class="nav-inner">
+
+      <button
+        id="navHome"
+        class="nav-button active"
+        onclick="showScreen('home')"
+      >
+        <span class="nav-icon">⌂</span>
+        思い出
+      </button>
+
+      <button
+        class="nav-add"
+        onclick="openNewMemory()"
+      >
+        ＋
+      </button>
+
+      <button
+        id="navMap"
+        class="nav-button"
+        onclick="showScreen('map')"
+      >
+        <span class="nav-icon">♡</span>
+        マップ
+      </button>
+
+    </div>
+
+  </nav>
+
+</div>
+
+
+<!-- Toast -->
+
+<div
+  id="toast"
+  class="toast"
+></div>
+
+
+<!-- Loading -->
+
+<div
+  id="loading"
+  class="loading"
+>
+
+  <div class="loading-box">
+
+    <div class="loading-icon">
+      ✿
+    </div>
+
+    <div>
+      保存しています…
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- Leaflet -->
+
+<script
+  src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+></script>
+
+
+<script>
+
+/* ============================================================
+   IndexedDB
+============================================================ */
+
+const DB_NAME = "myMemoryMapDB";
+const DB_VERSION = 1;
+
+let db = null;
+
+function openDatabase() {
+
+  return new Promise((resolve, reject) => {
+
+    const request = indexedDB.open(
+      DB_NAME,
+      DB_VERSION
+    );
+
+    request.onupgradeneeded = function(event) {
+
+      const database = event.target.result;
+
+      if (!database.objectStoreNames.contains("memories")) {
+
+        const store =
+          database.createObjectStore(
+            "memories",
+            {
+              keyPath: "id"
+            }
+          );
+
+        store.createIndex(
+          "date",
+          "date",
+          { unique: false }
+        );
+
+      }
+
+    };
+
+    request.onsuccess = function(event) {
+
+      db = event.target.result;
+
+      resolve(db);
+
+    };
+
+    request.onerror = function(event) {
+
+      reject(event.target.error);
+
+    };
+
+  });
+
+}
+
+
+/* ============================================================
+   DB utilities
+============================================================ */
+
+function getAllMemories() {
+
+  return new Promise((resolve, reject) => {
+
+    const transaction =
+      db.transaction(
+        "memories",
+        "readonly"
+      );
+
+    const store =
+      transaction.objectStore(
+        "memories"
+      );
+
+    const request =
+      store.getAll();
+
+    request.onsuccess =
+      () => resolve(request.result || []);
+
+    request.onerror =
+      () => reject(request.error);
+
+  });
+
+}
+
+
+function getMemory(id) {
+
+  return new Promise((resolve, reject) => {
+
+    const transaction =
+      db.transaction(
+        "memories",
+        "readonly"
+      );
+
+    const store =
+      transaction.objectStore(
+        "memories"
+      );
+
+    const request =
+      store.get(id);
+
+    request.onsuccess =
+      () => resolve(request.result);
+
+    request.onerror =
+      () => reject(request.error);
+
+  });
+
+}
+
+
+function saveMemory(memory) {
+
+  return new Promise((resolve, reject) => {
+
+    const transaction =
+      db.transaction(
+        "memories",
+        "readwrite"
+      );
+
+    const store =
+      transaction.objectStore(
+        "memories"
+      );
+
+    const request =
+      store.put(memory);
+
+    request.onsuccess =
+      () => resolve();
+
+    request.onerror =
+      () => reject(request.error);
+
+  });
+
+}
+
+
+function deleteMemoryFromDB(id) {
+
+  return new Promise((resolve, reject) => {
+
+    const transaction =
+      db.transaction(
+        "memories",
+        "readwrite"
+      );
+
+    const store =
+      transaction.objectStore(
+        "memories"
+      );
+
+    const request =
+      store.delete(id);
+
+    request.onsuccess =
+      () => resolve();
+
+    request.onerror =
+      () => reject(request.error);
+
+  });
+
+}
+
+
+/* ============================================================
+   localStorage → IndexedDB migration
+============================================================ */
+
+async function migrateOldData() {
+
+  const oldData =
+    localStorage.getItem("memories");
+
+  if (!oldData) {
+    return;
+  }
+
+  try {
+
+    const oldMemories =
+      JSON.parse(oldData);
+
+    if (!Array.isArray(oldMemories)) {
+      return;
+    }
+
+    const current =
+      await getAllMemories();
+
+    if (current.length > 0) {
+      return;
+    }
+
+    for (const oldMemory of oldMemories) {
+
+      const memory = {
+
+        id:
+          oldMemory.id ||
+          crypto.randomUUID(),
+
+        place:
+          oldMemory.place || "",
+
+        rating:
+          Number(oldMemory.rating) || 0,
+
+        date:
+          oldMemory.date || "",
+
+        genre:
+          oldMemory.genre || "",
+
+        price:
+          oldMemory.price || "",
+
+        comment:
+          oldMemory.comment || "",
+
+        latitude:
+          oldMemory.latitude !== undefined
+            ? Number(oldMemory.latitude)
+            : null,
+
+        longitude:
+          oldMemory.longitude !== undefined
+            ? Number(oldMemory.longitude)
+            : null,
+
+        photos: []
+
+      };
+
+      await saveMemory(memory);
+
+    }
+
+    showToast(
+      "これまでの思い出を新しい保存方式へ移行しました"
+    );
+
+  } catch (error) {
+
+    console.error(
+      "Migration error:",
+      error
+    );
+
+  }
+
+}
+
+
+/* ============================================================
+   State
+============================================================ */
+
+let memories = [];
+
+let selectedPhotos = [];
+
+let existingPhotos = [];
+
+let map = null;
+
+let mapMarkers = [];
+
+let currentDetailId = null;
+
+
+/* ============================================================
+   Initialization
+============================================================ */
+
+async function init() {
+
+  showLoading(true);
+
+  try {
+
+    await openDatabase();
+
+    await migrateOldData();
+
+    memories =
+      await getAllMemories();
+
+    memories.sort(
+      (a, b) =>
+        new Date(b.date) -
+        new Date(a.date)
+    );
+
+    renderMemoryList();
+
+    setupEvents();
+
+  } catch (error) {
+
+    console.error(error);
+
+    alert(
+      "データベースの初期化に失敗しました。"
+    );
+
+  }
+
+  showLoading(false);
+
+}
+
+
+/* ============================================================
+   Events
+============================================================ */
+
+function setupEvents() {
+
+  document
+    .getElementById("searchInput")
+    .addEventListener(
+      "input",
+      renderMemoryList
+    );
+
+  document
+    .getElementById("genreFilter")
+    .addEventListener(
+      "change",
+      renderMemoryList
+    );
+
+  document
+    .getElementById("ratingFilter")
+    .addEventListener(
+      "change",
+      renderMemoryList
+    );
+
+
+  document
+    .querySelectorAll(".rating-star")
+    .forEach(button => {
+
+      button.addEventListener(
+        "click",
+        () => {
+
+          const rating =
+            Number(
+              button.dataset.rating
+            );
+
+          setRating(rating);
+
+        }
+      );
+
+    });
+
+
+  document
+    .getElementById("photoInput")
+    .addEventListener(
+      "change",
+      handlePhotoSelection
+    );
+
+
+  document
+    .getElementById("memoryForm")
+    .addEventListener(
+      "submit",
+      handleFormSubmit
+    );
+
+
+  document
+    .getElementById("detailEditButton")
+    .addEventListener(
+      "click",
+      () => {
+
+        if (currentDetailId) {
+
+          openEditMemory(
+            currentDetailId
+          );
+
+        }
+
+      }
+    );
+
+}
+
+
+/* ============================================================
+   Screen navigation
+============================================================ */
+
+function showScreen(screen) {
+
+  document
+    .querySelectorAll(".screen")
+    .forEach(element => {
+
+      element.classList.remove(
+        "active"
+      );
+
+    });
+
+
+  if (screen === "home") {
+
+    document
+      .getElementById("homeScreen")
+      .classList.add("active");
+
+    document
+      .getElementById("navHome")
+      .classList.add("active");
+
+    document
+      .getElementById("navMap")
+      .classList.remove("active");
+
+    renderMemoryList();
+
+  }
+
+
+  if (screen === "map") {
+
+    document
+      .getElementById("mapScreen")
+      .classList.add("active");
+
+    document
+      .getElementById("navMap")
+      .classList.add("active");
+
+    document
+      .getElementById("navHome")
+      .classList.remove("active");
+
+    setTimeout(
+      initializeMap,
+      100
+    );
+
+  }
+
+
+  if (screen === "register") {
+
+    document
+      .getElementById("registerScreen")
+      .classList.add("active");
+
+  }
+
+
+  if (screen === "detail") {
+
+    document
+      .getElementById("detailScreen")
+      .classList.add("active");
+
+  }
+
+}
+
+
+/* ============================================================
+   New memory
+============================================================ */
+
+function openNewMemory() {
+
+  resetForm();
+
+  document
+    .getElementById("formTitle")
+    .textContent =
+      "思い出を残す";
+
+  showScreen("register");
+
+}
+
+
+function resetForm() {
+
+  document
+    .getElementById("memoryForm")
+    .reset();
+
+  document
+    .getElementById("editId")
+    .value = "";
+
+  document
+    .getElementById("rating")
+    .value = "0";
+
+  document
+    .getElementById("latitude")
+    .value = "";
+
+  document
+    .getElementById("longitude")
+    .value = "";
+
+  document
+    .getElementById("locationStatus")
+    .textContent =
+      "位置情報はまだ取得していません。";
+
+  document
+    .getElementById("coordinates")
+    .textContent = "";
+
+  selectedPhotos = [];
+
+  existingPhotos = [];
+
+  renderPhotoPreview();
+
+  setRating(0);
+
+  const now =
+    new Date();
+
+  now.setMinutes(
+    now.getMinutes() -
+    now.getTimezoneOffset()
+  );
+
+  document
+    .getElementById("date")
+    .value =
+      now.toISOString()
+        .slice(0,16);
+
+}
+
+
+/* ============================================================
+   Rating
+============================================================ */
+
+function setRating(rating) {
+
+  document
+    .getElementById("rating")
+    .value = rating;
+
+  document
+    .querySelectorAll(".rating-star")
+    .forEach(button => {
+
+      const value =
+        Number(
+          button.dataset.rating
+        );
+
+      button.classList.toggle(
+        "selected",
+        value <= rating
+      );
+
+    });
+
+}
+
+
+/* ============================================================
+   Photos
+============================================================ */
+
+function handlePhotoSelection(event) {
+
+  const files =
+    Array.from(
+      event.target.files || []
+    );
+
+  selectedPhotos.push(
+    ...files
+  );
+
+  renderPhotoPreview();
+
+  /*
+   同じ写真を再度選択できるようにする
+  */
+  event.target.value = "";
+
+}
+
+
+function renderPhotoPreview() {
+
+  const container =
+    document.getElementById(
+      "photoPreviewGrid"
+    );
+
+  container.innerHTML = "";
+
+
+  existingPhotos.forEach(
+    (photo, index) => {
+
+      const item =
+        document.createElement("div");
+
+      item.className =
+        "photo-preview-item";
+
+      const img =
+        document.createElement("img");
+
+      img.src =
+        photo.url ||
+        URL.createObjectURL(
+          photo.blob
+        );
+
+      const remove =
+        document.createElement("button");
+
+      remove.type =
+        "button";
+
+      remove.className =
+        "photo-remove";
+
+      remove.textContent =
+        "×";
+
+      remove.onclick =
+        () => {
+
+          existingPhotos.splice(
+            index,
+            1
+          );
+
+          renderPhotoPreview();
+
+        };
+
+
+      item.appendChild(img);
+      item.appendChild(remove);
+
+      container.appendChild(item);
+
+    }
+  );
+
+
+  selectedPhotos.forEach(
+    (file, index) => {
+
+      const item =
+        document.createElement("div");
+
+      item.className =
+        "photo-preview-item";
+
+      const img =
+        document.createElement("img");
+
+      img.src =
+        URL.createObjectURL(
+          file
+        );
+
+
+      const remove =
+        document.createElement("button");
+
+      remove.type =
+        "button";
+
+      remove.className =
+        "photo-remove";
+
+      remove.textContent =
+        "×";
+
+      remove.onclick =
+        () => {
+
+          selectedPhotos.splice(
+            index,
+            1
+          );
+
+          renderPhotoPreview();
+
+        };
+
+
+      item.appendChild(img);
+      item.appendChild(remove);
+
+      container.appendChild(item);
+
+    }
+  );
+
+}
+
+
+/* ============================================================
+   Form submit
+============================================================ */
+
+async function handleFormSubmit(event) {
+
+  event.preventDefault();
+
+
+  const place =
+    document
+      .getElementById("place")
+      .value
+      .trim();
+
+  const rating =
+    Number(
+      document
+        .getElementById("rating")
+        .value
+    );
+
+  if (!place) {
+
+    alert(
+      "場所を入力してください。"
+    );
+
+    return;
+
+  }
+
+
+  if (rating < 1) {
+
+    alert(
+      "評価を選択してください。"
+    );
+
+    return;
+
+  }
+
+
+  showLoading(true);
+
+
+  try {
+
+    const editId =
+      document
+        .getElementById("editId")
+        .value;
+
+
+    let memory;
+
+
+    if (editId) {
+
+      const old =
+        await getMemory(editId);
+
+      memory = {
+
+        ...old,
+
+        place,
+
+        rating,
+
+        date:
+          document
+            .getElementById("date")
+            .value,
+
+        genre:
+          document
+            .getElementById("genre")
+            .value,
+
+        price:
+          document
+            .getElementById("price")
+            .value,
+
+        comment:
+          document
+            .getElementById("comment")
+            .value
+            .trim(),
+
+        latitude:
+          getCoordinateValue(
+            "latitude"
+          ),
+
+        longitude:
+          getCoordinateValue(
+            "longitude"
+          ),
+
+        photos: [
+          ...existingPhotos,
+          ...await convertFilesToPhotoObjects(
+            selectedPhotos
+          )
+        ]
+
+      };
+
+    } else {
+
+      memory = {
+
+        id:
+          crypto.randomUUID(),
+
+        place,
+
+        rating,
+
+        date:
+          document
+            .getElementById("date")
+            .value,
+
+        genre:
+          document
+            .getElementById("genre")
+            .value,
+
+        price:
+          document
+            .getElementById("price")
+            .value,
+
+        comment:
+          document
+            .getElementById("comment")
+            .value
+            .trim(),
+
+        latitude:
+          getCoordinateValue(
+            "latitude"
+          ),
+
+        longitude:
+          getCoordinateValue(
+            "longitude"
+          ),
+
+        photos:
+          await convertFilesToPhotoObjects(
+            selectedPhotos
+          )
+
+      };
+
+    }
+
+
+    await saveMemory(
+      memory
+    );
+
+
+    memories =
+      await getAllMemories();
+
+    memories.sort(
+      (a,b) =>
+        new Date(b.date) -
+        new Date(a.date)
+    );
+
+
+    selectedPhotos = [];
+    existingPhotos = [];
+
+
+    showToast(
+      editId
+        ? "思い出を更新しました"
+        : "思い出を保存しました"
+    );
+
+
+    showScreen("home");
+
+
+  } catch (error) {
+
+    console.error(error);
+
+    alert(
+      "保存に失敗しました。\n" +
+      error.message
+    );
+
+  }
+
+
+  showLoading(false);
+
+}
+
+
+/* ============================================================
+   Photo → IndexedDB object
+============================================================ */
+
+async function convertFilesToPhotoObjects(
+  files
+) {
+
+  const result = [];
+
+  for (const file of files) {
+
+    result.push({
+
+      id:
+        crypto.randomUUID(),
+
+      name:
+        file.name,
+
+      type:
+        file.type,
+
+      blob:
+        file
+
+    });
+
+  }
+
+  return result;
+
+}
+
+
+/* ============================================================
+   Coordinate
+============================================================ */
+
+function getCoordinateValue(id) {
+
+  const value =
+    document
+      .getElementById(id)
+      .value;
+
+  if (!value) {
+    return null;
+  }
+
+  const number =
+    Number(value);
+
+  return Number.isFinite(number)
+    ? number
+    : null;
+
+}
+
+
+/* ============================================================
+   GPS
+============================================================ */
+
+function getCurrentLocation() {
+
+  if (!navigator.geolocation) {
+
+    alert(
+      "このブラウザでは位置情報を利用できません。"
+    );
+
+    return;
+
+  }
+
+
+  const status =
+    document
+      .getElementById(
+        "locationStatus"
+      );
+
+  status.textContent =
+    "現在地を取得しています…";
+
+
+  navigator.geolocation.getCurrentPosition(
+
+    position => {
+
+      const lat =
+        position.coords.latitude;
+
+      const lng =
+        position.coords.longitude;
+
+
+      document
+        .getElementById(
+          "latitude"
+        )
+        .value =
+          lat;
+
+      document
+        .getElementById(
+          "longitude"
+        )
+        .value =
+          lng;
+
+
+      status.textContent =
+        "位置情報を取得しました。";
+
+      document
+        .getElementById(
+          "coordinates"
+        )
+        .textContent =
+          `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+
+    },
+
+    error => {
+
+      console.error(error);
+
+      status.textContent =
+        "位置情報を取得できませんでした。";
+
+      alert(
+        "位置情報を取得できませんでした。\n\n" +
+        "iPhoneの位置情報設定と、ブラウザへの位置情報許可を確認してください。"
+      );
+
+    },
+
+    {
+
+      enableHighAccuracy:
+        true,
+
+      timeout:
+        15000,
+
+      maximumAge:
+        0
+
+    }
+
+  );
+
+}
+
+
+/* ============================================================
+   Render memory list
+============================================================ */
+
+function renderMemoryList() {
+
+  const container =
+    document.getElementById(
+      "memoryList"
+    );
+
+  const search =
+    document
+      .getElementById(
+        "searchInput"
+      )
+      .value
+      .trim()
+      .toLowerCase();
+
+  const genre =
+    document
+      .getElementById(
+        "genreFilter"
+      )
+      .value;
+
+  const rating =
+    document
+      .getElementById(
+        "ratingFilter"
+      )
+      .value;
+
+
+  let filtered =
+    memories.filter(
+      memory => {
+
+        const searchTarget =
+          [
+            memory.place,
+            memory.comment,
+            memory.genre
+          ]
+            .join(" ")
+            .toLowerCase();
+
+
+        const matchesSearch =
+          !search ||
+          searchTarget.includes(
+            search
+          );
+
+
+        const matchesGenre =
+          !genre ||
+          memory.genre === genre;
+
+
+        const matchesRating =
+          !rating ||
+          Number(memory.rating) >=
+            Number(rating);
+
+
+        return (
+          matchesSearch &&
+          matchesGenre &&
+          matchesRating
+        );
+
+      }
+    );
+
+
+  container.innerHTML = "";
+
+
+  if (filtered.length === 0) {
+
+    container.innerHTML = `
+
+      <div class="empty-state">
+
+        <div class="empty-icon">
+          🌷
+        </div>
+
+        <div>
+          まだ思い出がありません
+        </div>
+
+        <div style="font-size:12px;margin-top:6px;">
+          大切な一日を残してみよう。
+        </div>
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  filtered.forEach(
+    memory => {
+
+      const card =
+        document.createElement(
+          "div"
+        );
+
+      card.className =
+        "memory-card";
+
+
+      const photo =
+        getFirstPhoto(memory);
+
+
+      if (photo) {
+
+        const img =
+          document.createElement(
+            "img"
+          );
+
+        img.className =
+          "memory-card-photo";
+
+        img.src =
+          createPhotoURL(
+            photo
+          );
+
+        card.appendChild(img);
+
+      } else {
+
+        const noPhoto =
+          document.createElement(
+            "div"
+          );
+
+        noPhoto.className =
+          "memory-card-no-photo";
+
+        noPhoto.textContent =
+          "✿";
+
+        card.appendChild(
+          noPhoto
+        );
+
+      }
+
+
+      const body =
+        document.createElement(
+          "div"
+        );
+
+      body.className =
+        "memory-card-body";
+
+
+      const top =
+        document.createElement(
+          "div"
+        );
+
+      top.className =
+        "memory-card-top";
+
+
+      const left =
+        document.createElement(
+          "div"
+        );
+
+      const place =
+        document.createElement(
+          "div"
+        );
+
+      place.className =
+        "memory-place";
+
+      place.textContent =
+        memory.place;
+
+
+      const date =
+        document.createElement(
+          "div"
+        );
+
+      date.className =
+        "memory-date";
+
+      date.textContent =
+        formatDate(
+          memory.date
+        );
+
+
+      left.appendChild(place);
+      left.appendChild(date);
+
+
+      const stars =
+        document.createElement(
+          "div"
+        );
+
+      stars.className =
+        "stars";
+
+      stars.textContent =
+        makeStars(
+          memory.rating
+        );
+
+
+      top.appendChild(left);
+      top.appendChild(stars);
+
+
+      body.appendChild(top);
+
+
+      const meta =
+        document.createElement(
+          "div"
+        );
+
+      meta.className =
+        "memory-meta";
+
+
+      if (memory.genre) {
+
+        const tag =
+          document.createElement(
+            "span"
+          );
+
+        tag.className =
+          "tag";
+
+        tag.textContent =
+          memory.genre;
+
+        meta.appendChild(tag);
+
+      }
+
+
+      if (memory.price) {
+
+        const tag =
+          document.createElement(
+            "span"
+          );
+
+        tag.className =
+          "tag";
+
+        tag.textContent =
+          `¥${Number(memory.price).toLocaleString()}`;
+
+        meta.appendChild(tag);
+
+      }
+
+
+      if (
+        hasLocation(memory)
+      ) {
+
+        const tag =
+          document.createElement(
+            "span"
+          );
+
+        tag.className =
+          "tag location-tag";
+
+        tag.textContent =
+          "📍位置情報あり";
+
+        meta.appendChild(tag);
+
+      }
+
+
+      body.appendChild(meta);
+
+
+      if (memory.comment) {
+
+        const comment =
+          document.createElement(
+            "div"
+          );
+
+        comment.className =
+          "memory-comment";
+
+        comment.textContent =
+          memory.comment;
+
+        body.appendChild(
+          comment
+        );
+
+      }
+
+
+      card.appendChild(body);
+
+
+      card.addEventListener(
+        "click",
+        () => {
+
+          openDetail(
+            memory.id
+          );
+
+        }
+      );
+
+
+      container.appendChild(
+        card
+      );
+
+    }
+  );
+
+}
+
+
+/* ============================================================
+   Detail
+============================================================ */
+
+async function openDetail(id) {
+
+  const memory =
+    await getMemory(id);
+
+  if (!memory) {
+    return;
+  }
+
+
+  currentDetailId =
+    id;
+
+
+  const container =
+    document.getElementById(
+      "detailContent"
+    );
+
+  container.innerHTML = "";
+
+
+  const card =
+    document.createElement(
+      "div"
+    );
+
+  card.className =
+    "detail-card";
+
+
+  const photos =
+    memory.photos || [];
+
+
+  if (photos.length > 0) {
+
+    const main =
+      document.createElement(
+        "img"
+      );
+
+    main.className =
+      "detail-main-photo";
+
+    main.src =
+      createPhotoURL(
+        photos[0]
+      );
+
+    card.appendChild(main);
+
+
+    if (photos.length > 1) {
+
+      const photoRow =
+        document.createElement(
+          "div"
+        );
+
+      photoRow.className =
+        "detail-photos";
+
+
+      photos.forEach(
+        photo => {
+
+          const img =
+            document.createElement(
+              "img"
+            );
+
+          img.className =
+            "detail-photo";
+
+          img.src =
+            createPhotoURL(
+              photo
+            );
+
+          img.onclick =
+            () => {
+
+              main.src =
+                createPhotoURL(
+                  photo
+                );
+
+            };
+
+
+          photoRow.appendChild(
+            img
+          );
+
+        }
+      );
+
+
+      card.appendChild(
+        photoRow
+      );
+
+    }
+
+  }
+
+
+  const body =
+    document.createElement(
+      "div"
+    );
+
+  body.className =
+    "detail-body";
+
+
+  const place =
+    document.createElement(
+      "div"
+    );
+
+  place.className =
+    "detail-place";
+
+  place.textContent =
+    memory.place;
+
+
+  const date =
+    document.createElement(
+      "div"
+    );
+
+  date.className =
+    "detail-date";
+
+  date.textContent =
+    formatDate(
+      memory.date
+    );
+
+
+  const rating =
+    document.createElement(
+      "div"
+    );
+
+  rating.className =
+    "detail-rating";
+
+  rating.textContent =
+    makeStars(
+      memory.rating
+    );
+
+
+  body.appendChild(place);
+  body.appendChild(date);
+  body.appendChild(rating);
+
+
+  const tags =
+    document.createElement(
+      "div"
+    );
+
+  tags.className =
+    "detail-tags";
+
+
+  if (memory.genre) {
+
+    tags.appendChild(
+      createTag(
+        memory.genre
+      )
+    );
+
+  }
+
+
+  if (memory.price) {
+
+    tags.appendChild(
+      createTag(
+        `¥${Number(memory.price).toLocaleString()}`
+      )
+    );
+
+  }
+
+
+  if (hasLocation(memory)) {
+
+    const locationTag =
+      createTag(
+        "📍位置情報あり"
+      );
+
+    locationTag.classList.add(
+      "location-tag"
+    );
+
+    tags.appendChild(
+      locationTag
+    );
+
+  }
+
+
+  body.appendChild(
+    tags
+  );
+
+
+  if (memory.comment) {
+
+    const comment =
+      document.createElement(
+        "div"
+      );
+
+    comment.className =
+      "detail-comment";
+
+    comment.textContent =
+      memory.comment;
+
+    body.appendChild(
+      comment
+    );
+
+  }
+
+
+  const actions =
+    document.createElement(
+      "div"
+    );
+
+  actions.className =
+    "detail-actions";
+
+
+  if (hasLocation(memory)) {
+
+    const mapButton =
+      document.createElement(
+        "button"
+      );
+
+    mapButton.className =
+      "secondary-button";
+
+    mapButton.textContent =
+      "🗺️ 地図で見る";
+
+    mapButton.onclick =
+      () => {
+
+        showScreen("map");
+
+        setTimeout(
+          () => focusMemoryOnMap(
+            memory
+          ),
+          250
+        );
+
+      };
+
+    actions.appendChild(
+      mapButton
+    );
+
+  }
+
+
+  const deleteButton =
+    document.createElement(
+      "button"
+    );
+
+  deleteButton.className =
+    "danger-button";
+
+  deleteButton.textContent =
+    "削除";
+
+  deleteButton.onclick =
+    () => {
+
+      deleteCurrentMemory(
+        memory.id
+      );
+
+    };
+
+
+  actions.appendChild(
+    deleteButton
+  );
+
+
+  body.appendChild(
+    actions
+  );
+
+  card.appendChild(
+    body
+  );
+
+  container.appendChild(
+    card
+  );
+
+
+  showScreen("detail");
+
+}
+
+
+/* ============================================================
+   Edit
+============================================================ */
+
+async function openEditMemory(id) {
+
+  const memory =
+    await getMemory(id);
+
+  if (!memory) {
+    return;
+  }
+
+
+  document
+    .getElementById("formTitle")
+    .textContent =
+      "思い出を編集";
+
+
+  document
+    .getElementById("editId")
+    .value =
+      memory.id;
+
+
+  document
+    .getElementById("place")
+    .value =
+      memory.place || "";
+
+
+  document
+    .getElementById("date")
+    .value =
+      memory.date || "";
+
+
+  document
+    .getElementById("genre")
+    .value =
+      memory.genre || "";
+
+
+  document
+    .getElementById("price")
+    .value =
+      memory.price || "";
+
+
+  document
+    .getElementById("comment")
+    .value =
+      memory.comment || "";
+
+
+  document
+    .getElementById("latitude")
+    .value =
+      memory.latitude ?? "";
+
+
+  document
+    .getElementById("longitude")
+    .value =
+      memory.longitude ?? "";
+
+
+  if (hasLocation(memory)) {
+
+    document
+      .getElementById(
+        "locationStatus"
+      )
+      .textContent =
+        "位置情報あり";
+
+    document
+      .getElementById(
+        "coordinates"
+      )
+      .textContent =
+        `${memory.latitude.toFixed(6)}, ${memory.longitude.toFixed(6)}`;
+
+  } else {
+
+    document
+      .getElementById(
+        "locationStatus"
+      )
+      .textContent =
+        "位置情報はまだ取得していません。";
+
+    document
+      .getElementById(
+        "coordinates"
+      )
+      .textContent = "";
+
+  }
+
+
+  setRating(
+    Number(memory.rating)
+  );
+
+
+  existingPhotos =
+    (memory.photos || []).map(
+      photo => ({
+        ...photo
+      })
+    );
+
+
+  selectedPhotos = [];
+
+
+  renderPhotoPreview();
+
+
+  showScreen(
+    "register"
+  );
+
+}
+
+
+/* ============================================================
+   Delete
+============================================================ */
+
+async function deleteCurrentMemory(
+  id
+) {
+
+  const ok =
+    confirm(
+      "この思い出を削除しますか？\n\n写真も思い出マップから削除されます。"
+    );
+
+  if (!ok) {
+    return;
+  }
+
+
+  showLoading(true);
+
+
+  try {
+
+    await deleteMemoryFromDB(
+      id
+    );
+
+    memories =
+      await getAllMemories();
+
+
+    memories.sort(
+      (a,b) =>
+        new Date(b.date) -
+        new Date(a.date)
+    );
+
+
+    showToast(
+      "思い出を削除しました"
+    );
+
+    showScreen("home");
+
+  } catch (error) {
+
+    console.error(error);
+
+    alert(
+      "削除に失敗しました。"
+    );
+
+  }
+
+
+  showLoading(false);
+
+}
+
+
+/* ============================================================
+   Map
+============================================================ */
+
+function initializeMap() {
+
+  if (!map) {
+
+    map =
+      L.map(
+        "map",
+        {
+          zoomControl: true,
+          attributionControl: true
+        }
+      );
+
+
+    /*
+      OpenStreetMap
+    */
+
+    L.tileLayer(
+      "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+      {
+        maxZoom: 19,
+        attribution:
+          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+      }
+    ).addTo(map);
+
+  }
+
+
+  setTimeout(
+    () => {
+
+      map.invalidateSize(
+        true
+      );
+
+      renderMapMarkers();
+
+    },
+    100
+  );
+
+}
+
+
+function renderMapMarkers() {
+
+  if (!map) {
+    return;
+  }
+
+
+  mapMarkers.forEach(
+    marker => {
+
+      map.removeLayer(
+        marker
+      );
+
+    }
+  );
+
+
+  mapMarkers = [];
+
+
+  const memoriesWithLocation =
+    memories.filter(
+      hasLocation
+    );
+
+
+  document
+    .getElementById(
+      "mapCount"
+    )
+    .textContent =
+      `${memoriesWithLocation.length}か所`;
+
+
+  if (
+    memoriesWithLocation.length === 0
+  ) {
+
+    map.setView(
+      [35.681236,139.767125],
+      12
+    );
+
+    return;
+
+  }
+
+
+  const bounds =
+    [];
+
+
+  memoriesWithLocation.forEach(
+    memory => {
+
+      const lat =
+        Number(
+          memory.latitude
+        );
+
+      const lng =
+        Number(
+          memory.longitude
+        );
+
+
+      bounds.push([
+        lat,
+        lng
+      ]);
+
+
+      const icon =
+        L.divIcon({
+
+          className:
+            "",
+
+          html: `
+            <div class="memory-pin">
+              <div class="memory-pin-inner">
+                ♥
+              </div>
+            </div>
+          `,
+
+          iconSize:
+            [38,38],
+
+          iconAnchor:
+            [19,38],
+
+          popupAnchor:
+            [0,-38]
+
+        });
+
+
+      const marker =
+        L.marker(
+          [lat,lng],
+          {
+            icon
+          }
+        )
+        .addTo(map);
+
+
+      marker.bindPopup(
+        createPopup(memory)
+      );
+
+
+      mapMarkers.push(
+        marker
+      );
+
+    }
+  );
+
+
+  if (bounds.length === 1) {
+
+    map.setView(
+      bounds[0],
+      15
+    );
+
+  } else {
+
+    map.fitBounds(
+      bounds,
+      {
+        padding:
+          [50,50],
+
+        maxZoom:
+          15
+      }
+    );
+
+  }
+
+}
+
+
+function createPopup(memory) {
+
+  const div =
+    document.createElement(
+      "div"
+    );
+
+
+  const place =
+    document.createElement(
+      "div"
+    );
+
+  place.className =
+    "popup-place";
+
+  place.textContent =
+    memory.place;
+
+
+  const date =
+    document.createElement(
+      "div"
+    );
+
+  date.className =
+    "popup-date";
+
+  date.textContent =
+    formatDate(
+      memory.date
+    );
+
+
+  const rating =
+    document.createElement(
+      "div"
+    );
+
+  rating.className =
+    "popup-rating";
+
+  rating.textContent =
+    makeStars(
+      memory.rating
+    );
+
+
+  const button =
+    document.createElement(
+      "button"
+    );
+
+  button.className =
+    "popup-button";
+
+  button.textContent =
+    "思い出を見る";
+
+
+  button.onclick =
+    () => {
+
+      openDetail(
+        memory.id
+      );
+
+    };
+
+
+  div.appendChild(
+    place
+  );
+
+  div.appendChild(
+    date
+  );
+
+  div.appendChild(
+    rating
+  );
+
+  div.appendChild(
+    button
+  );
+
+
+  return div;
+
+}
+
+
+function focusMemoryOnMap(memory) {
+
+  if (!map) {
+    initializeMap();
+  }
+
+
+  setTimeout(
+    () => {
+
+      map.invalidateSize(
+        true
+      );
+
+      map.setView(
+        [
+          Number(
+            memory.latitude
+          ),
+          Number(
+            memory.longitude
+          )
+        ],
+        16
+      );
+
+
+      const target =
+        mapMarkers.find(
+          marker => {
+
+            const latlng =
+              marker.getLatLng();
+
+            return (
+              Math.abs(
+                latlng.lat -
+                Number(
+                  memory.latitude
+                )
+              ) < 0.000001
+              &&
+              Math.abs(
+                latlng.lng -
+                Number(
+                  memory.longitude
+                )
+              ) < 0.000001
+            );
+
+          }
+        );
+
+
+      if (target) {
+
+        target.openPopup();
+
+      }
+
+    },
+    150
+  );
+
+}
+
+
+function moveMapToCurrentLocation() {
+
+  if (!navigator.geolocation) {
+
+    alert(
+      "位置情報を利用できません。"
+    );
+
+    return;
+
+  }
+
+
+  navigator.geolocation.getCurrentPosition(
+
+    position => {
+
+      if (!map) {
+        return;
+      }
+
+
+      map.setView(
+        [
+          position.coords.latitude,
+          position.coords.longitude
+        ],
+        16
+      );
+
+    },
+
+    () => {
+
+      alert(
+        "現在地を取得できませんでした。"
+      );
+
+    },
+
+    {
+      enableHighAccuracy:
+        true,
+
+      timeout:
+        15000,
+
+      maximumAge:
+        0
+    }
+
+  );
+
+}
+
+
+/* ============================================================
+   Utilities
+============================================================ */
+
+function hasLocation(memory) {
+
+  const lat =
+    Number(
+      memory.latitude
+    );
+
+  const lng =
+    Number(
+      memory.longitude
+    );
+
+
+  return (
+    Number.isFinite(lat) &&
+    Number.isFinite(lng) &&
+    lat >= -90 &&
+    lat <= 90 &&
+    lng >= -180 &&
+    lng <= 180
+  );
+
+}
+
+
+function getFirstPhoto(memory) {
+
+  if (
+    !memory.photos ||
+    memory.photos.length === 0
+  ) {
+
+    return null;
+
+  }
+
+  return memory.photos[0];
+
+}
+
+
+function createPhotoURL(photo) {
+
+  if (!photo) {
+    return "";
+  }
+
+
+  if (
+    photo.blob instanceof Blob
+  ) {
+
+    return URL.createObjectURL(
+      photo.blob
+    );
+
+  }
+
+
+  if (photo.url) {
+    return photo.url;
+  }
+
+
+  return "";
+
+}
+
+
+function makeStars(rating) {
+
+  const value =
+    Number(rating) || 0;
+
+  return (
+    "★".repeat(value) +
+    "☆".repeat(5-value)
+  );
+
+}
+
+
+function formatDate(dateString) {
+
+  if (!dateString) {
+    return "";
+  }
+
+
+  const date =
+    new Date(
+      dateString
+    );
+
+
+  if (
+    Number.isNaN(
+      date.getTime()
+    )
+  ) {
+
+    return dateString;
+
+  }
+
+
+  return date.toLocaleDateString(
+    "ja-JP",
+    {
+      year: "numeric",
+      month: "long",
+      day: "numeric"
+    }
+  );
+
+}
+
+
+function createTag(text) {
+
+  const tag =
+    document.createElement(
+      "span"
+    );
+
+  tag.className =
+    "tag";
+
+  tag.textContent =
+    text;
+
+  return tag;
+
+}
+
+
+/* ============================================================
+   Toast / Loading
+============================================================ */
+
+let toastTimer = null;
+
+function showToast(message) {
+
+  const toast =
+    document.getElementById(
+      "toast"
+    );
+
+  toast.textContent =
+    message;
+
+  toast.classList.add(
+    "show"
+  );
+
+
+  clearTimeout(
+    toastTimer
+  );
+
+
+  toastTimer =
+    setTimeout(
+      () => {
+
+        toast.classList.remove(
+          "show"
+        );
+
+      },
+      2200
+    );
+
+}
+
+
+function showLoading(show) {
+
+  document
+    .getElementById(
+      "loading"
+    )
+    .classList.toggle(
+      "show",
+      show
+    );
+
+}
+
+
+/* ============================================================
+   Start
+============================================================ */
+
+init();
+
+</script>
+
+</body>
+</html>
