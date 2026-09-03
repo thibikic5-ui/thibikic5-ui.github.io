@@ -1,0 +1,2652 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+
+  <!-- iPhone向け -->
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+
+  <meta name="theme-color" content="#ffffff" />
+
+  <title>マイ思い出マップ</title>
+
+  <!-- Leaflet -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  />
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Helvetica Neue",
+        Arial,
+        sans-serif;
+      background: #f7f7f5;
+      color: #222;
+    }
+
+    button,
+    input,
+    textarea,
+    select {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .app {
+      min-height: 100vh;
+      padding-bottom: 80px;
+    }
+
+    /* =========================
+       ヘッダー
+    ========================= */
+
+    header {
+      background: #fff;
+      padding:
+        calc(env(safe-area-inset-top) + 18px)
+        20px
+        16px;
+      border-bottom: 1px solid #eee;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 22px;
+      font-weight: 700;
+    }
+
+    header p {
+      margin: 5px 0 0;
+      color: #888;
+      font-size: 13px;
+    }
+
+    /* =========================
+       メイン
+    ========================= */
+
+    main {
+      padding: 20px 16px;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .screen {
+      display: none;
+    }
+
+    .screen.active {
+      display: block;
+    }
+
+    /* =========================
+       カード
+    ========================= */
+
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 18px;
+      margin-bottom: 14px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+    }
+
+    .card h2 {
+      margin-top: 0;
+      font-size: 18px;
+    }
+
+    /* =========================
+       入力
+    ========================= */
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 7px;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      padding: 12px;
+      background: #fff;
+      outline: none;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      border-color: #888;
+    }
+
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+
+    /* =========================
+       ボタン
+    ========================= */
+
+    .button {
+      border: none;
+      border-radius: 12px;
+      padding: 13px 16px;
+      font-weight: 600;
+      width: 100%;
+      margin-top: 5px;
+    }
+
+    .button-primary {
+      background: #222;
+      color: #fff;
+    }
+
+    .button-secondary {
+      background: #eee;
+      color: #222;
+    }
+
+    .button-danger {
+      background: #fce8e8;
+      color: #c62828;
+    }
+
+    .button-small {
+      width: auto;
+      padding: 9px 12px;
+      font-size: 13px;
+    }
+
+    /* =========================
+       評価
+    ========================= */
+
+    .rating {
+      display: flex;
+      gap: 5px;
+      font-size: 30px;
+    }
+
+    .rating-star {
+      border: none;
+      background: none;
+      padding: 0;
+      color: #ddd;
+    }
+
+    .rating-star.active {
+      color: #f4b400;
+    }
+
+    .stars {
+      color: #f4b400;
+      letter-spacing: 2px;
+    }
+
+    /* =========================
+       一覧
+    ========================= */
+
+    .memory-item {
+      background: #fff;
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 12px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+    }
+
+    .memory-item h3 {
+      margin: 0 0 5px;
+      font-size: 17px;
+    }
+
+    .memory-meta {
+      color: #888;
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+
+    .memory-comment {
+      color: #444;
+      font-size: 14px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+    }
+
+    .memory-location {
+      margin-top: 10px;
+      font-size: 13px;
+      color: #387d4d;
+    }
+
+    /* =========================
+       詳細
+    ========================= */
+
+    .detail-title {
+      font-size: 24px;
+      margin: 0 0 8px;
+    }
+
+    .detail-row {
+      padding: 12px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .detail-label {
+      font-size: 12px;
+      color: #999;
+      margin-bottom: 3px;
+    }
+
+    .detail-value {
+      font-size: 15px;
+      white-space: pre-wrap;
+    }
+
+    /* =========================
+       GPS
+    ========================= */
+
+    .gps-box {
+      background: #f3f8f4;
+      border-radius: 12px;
+      padding: 12px;
+      margin-top: 10px;
+      font-size: 13px;
+    }
+
+    .gps-success {
+      color: #287844;
+    }
+
+    .gps-error {
+      color: #c62828;
+    }
+
+    /* =========================
+       地図
+    ========================= */
+
+    #map {
+      width: 100%;
+      height: 65vh;
+      min-height: 450px;
+      border-radius: 16px;
+      overflow: hidden;
+      background: #e5e5e5;
+    }
+
+    .map-controls {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .map-controls button {
+      flex: 1;
+    }
+
+    /* =========================
+       検索
+    ========================= */
+
+    .search-box {
+      margin-bottom: 16px;
+    }
+
+    .empty {
+      text-align: center;
+      color: #999;
+      padding: 50px 20px;
+    }
+
+    /* =========================
+       ナビ
+    ========================= */
+
+    .bottom-nav {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: calc(64px + env(safe-area-inset-bottom));
+      padding-bottom: env(safe-area-inset-bottom);
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(10px);
+      border-top: 1px solid #eee;
+      display: flex;
+      z-index: 2000;
+    }
+
+    .nav-button {
+      flex: 1;
+      border: none;
+      background: transparent;
+      color: #999;
+      font-size: 12px;
+    }
+
+    .nav-button.active {
+      color: #222;
+      font-weight: 700;
+    }
+
+    .nav-icon {
+      display: block;
+      font-size: 22px;
+      margin-bottom: 2px;
+    }
+
+    /* =========================
+       戻る
+    ========================= */
+
+    .back-button {
+      border: none;
+      background: none;
+      padding: 0;
+      margin-bottom: 15px;
+      color: #666;
+      font-size: 14px;
+    }
+
+    /* =========================
+       レスポンシブ
+    ========================= */
+
+    @media (min-width: 700px) {
+      main {
+        padding-top: 30px;
+      }
+
+      #map {
+        height: 600px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <!-- =========================
+       HEADER
+  ========================= -->
+
+  <header>
+    <h1>マイ思い出マップ</h1>
+    <p id="headerSubtitle">あなたの思い出を残す場所</p>
+  </header>
+
+
+  <!-- =========================
+       MAIN
+  ========================= -->
+
+  <main>
+
+    <!-- =========================
+         HOME
+    ========================= -->
+
+    <section id="homeScreen" class="screen active">
+
+      <div class="card">
+        <h2>思い出を残す</h2>
+
+        <button
+          class="button button-primary"
+          onclick="showScreen('register')"
+        >
+          ＋ 思い出を登録
+        </button>
+      </div>
+
+      <div class="search-box">
+        <input
+          id="searchInput"
+          type="search"
+          placeholder="場所・ジャンル・コメントから検索"
+          oninput="renderMemoryList()"
+        />
+      </div>
+
+      <div id="memoryList"></div>
+
+    </section>
+
+
+    <!-- =========================
+         REGISTER
+    ========================= -->
+
+    <section id="registerScreen" class="screen">
+
+      <button
+        class="back-button"
+        onclick="showScreen('home')"
+      >
+        ← 戻る
+      </button>
+
+      <div class="card">
+
+        <h2>思い出を登録</h2>
+
+        <div class="form-group">
+          <label>場所 *</label>
+          <input
+            id="placeInput"
+            type="text"
+            placeholder="例：新潟駅"
+          />
+        </div>
+
+
+        <div class="form-group">
+
+          <label>評価 *</label>
+
+          <div class="rating">
+
+            <button
+              class="rating-star"
+              data-rating="1"
+              onclick="setRating(1)"
+            >★</button>
+
+            <button
+              class="rating-star"
+              data-rating="2"
+              onclick="setRating(2)"
+            >★</button>
+
+            <button
+              class="rating-star"
+              data-rating="3"
+              onclick="setRating(3)"
+            >★</button>
+
+            <button
+              class="rating-star"
+              data-rating="4"
+              onclick="setRating(4)"
+            >★</button>
+
+            <button
+              class="rating-star"
+              data-rating="5"
+              onclick="setRating(5)"
+            >★</button>
+
+          </div>
+
+          <input
+            id="ratingInput"
+            type="hidden"
+            value="0"
+          />
+
+        </div>
+
+
+        <div class="form-group">
+          <label>日付</label>
+
+          <input
+            id="dateInput"
+            type="datetime-local"
+          />
+        </div>
+
+
+        <div class="form-group">
+
+          <label>ジャンル</label>
+
+          <select id="genreInput">
+
+            <option value="">選択してください</option>
+
+            <option value="食事">食事</option>
+            <option value="カフェ">カフェ</option>
+            <option value="旅行">旅行</option>
+            <option value="買い物">買い物</option>
+            <option value="デート">デート</option>
+            <option value="イベント">イベント</option>
+            <option value="自然">自然</option>
+            <option value="その他">その他</option>
+
+          </select>
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>金額</label>
+
+          <input
+            id="priceInput"
+            type="number"
+            min="0"
+            placeholder="例：3000"
+          />
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>コメント</label>
+
+          <textarea
+            id="commentInput"
+            placeholder="ここで何をした？どんな場所だった？"
+          ></textarea>
+
+        </div>
+
+
+        <!-- GPS -->
+
+        <div class="form-group">
+
+          <label>位置情報</label>
+
+          <button
+            type="button"
+            class="button button-secondary"
+            onclick="getCurrentLocation()"
+          >
+            📍 現在地を取得
+          </button>
+
+          <div
+            id="gpsStatus"
+            class="gps-box"
+          >
+            位置情報はまだ取得していません
+          </div>
+
+          <input
+            id="latitudeInput"
+            type="hidden"
+          />
+
+          <input
+            id="longitudeInput"
+            type="hidden"
+          />
+
+        </div>
+
+
+        <button
+          class="button button-primary"
+          onclick="saveMemory()"
+        >
+          保存する
+        </button>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================
+         DETAIL
+    ========================= -->
+
+    <section id="detailScreen" class="screen">
+
+      <button
+        class="back-button"
+        onclick="showScreen('home')"
+      >
+        ← 戻る
+      </button>
+
+      <div id="detailContent"></div>
+
+    </section>
+
+
+    <!-- =========================
+         EDIT
+    ========================= -->
+
+    <section id="editScreen" class="screen">
+
+      <button
+        class="back-button"
+        onclick="showDetail(editingId)"
+      >
+        ← 戻る
+      </button>
+
+      <div class="card">
+
+        <h2>思い出を編集</h2>
+
+        <div class="form-group">
+          <label>場所</label>
+
+          <input id="editPlaceInput" type="text">
+        </div>
+
+
+        <div class="form-group">
+
+          <label>評価</label>
+
+          <div
+            id="editRatingStars"
+            class="rating"
+          ></div>
+
+          <input
+            id="editRatingInput"
+            type="hidden"
+          />
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>日付</label>
+
+          <input
+            id="editDateInput"
+            type="datetime-local"
+          />
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>ジャンル</label>
+
+          <select id="editGenreInput">
+
+            <option value="">選択してください</option>
+
+            <option value="食事">食事</option>
+            <option value="カフェ">カフェ</option>
+            <option value="旅行">旅行</option>
+            <option value="買い物">買い物</option>
+            <option value="デート">デート</option>
+            <option value="イベント">イベント</option>
+            <option value="自然">自然</option>
+            <option value="その他">その他</option>
+
+          </select>
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>金額</label>
+
+          <input
+            id="editPriceInput"
+            type="number"
+            min="0"
+          />
+
+        </div>
+
+
+        <div class="form-group">
+
+          <label>コメント</label>
+
+          <textarea
+            id="editCommentInput"
+          ></textarea>
+
+        </div>
+
+
+        <button
+          class="button button-primary"
+          onclick="updateMemory()"
+        >
+          保存する
+        </button>
+
+        <button
+          class="button button-danger"
+          onclick="deleteMemory(editingId)"
+        >
+          この思い出を削除
+        </button>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================
+         MAP
+    ========================= -->
+
+    <section id="mapScreen" class="screen">
+
+      <div class="map-controls">
+
+        <button
+          class="button button-secondary"
+          onclick="moveMapToCurrentLocation()"
+        >
+          📍 現在地
+        </button>
+
+        <button
+          class="button button-secondary"
+          onclick="fitAllMarkers()"
+        >
+          🗺 全部表示
+        </button>
+
+      </div>
+
+      <div id="map"></div>
+
+      <div
+        id="mapStatus"
+        class="gps-box"
+        style="margin-top:12px;"
+      ></div>
+
+    </section>
+
+
+    <!-- =========================
+         SETTINGS
+    ========================= -->
+
+    <section id="settingsScreen" class="screen">
+
+      <div class="card">
+
+        <h2>設定</h2>
+
+        <p style="color:#777;font-size:14px;line-height:1.7;">
+          このアプリのデータは、この端末のブラウザ内に保存されています。
+        </p>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- =========================
+       NAVIGATION
+  ========================= -->
+
+  <nav class="bottom-nav">
+
+    <button
+      id="navHome"
+      class="nav-button active"
+      onclick="showScreen('home')"
+    >
+      <span class="nav-icon">🏠</span>
+      ホーム
+    </button>
+
+
+    <button
+      id="navMap"
+      class="nav-button"
+      onclick="showScreen('map')"
+    >
+      <span class="nav-icon">🗺</span>
+      マップ
+    </button>
+
+
+    <button
+      id="navSettings"
+      class="nav-button"
+      onclick="showScreen('settings')"
+    >
+      <span class="nav-icon">⚙️</span>
+      設定
+    </button>
+
+  </nav>
+
+</div>
+
+
+<!-- Leaflet JS -->
+
+<script
+  src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+></script>
+
+
+<script>
+
+  /* =========================================================
+     基本設定
+  ========================================================= */
+
+  const STORAGE_KEY = "my_memory_map_memories";
+
+  let memories = [];
+
+  let editingId = null;
+
+  let selectedRating = 0;
+
+  let map = null;
+
+  let markers = [];
+
+  let currentLocationMarker = null;
+
+
+  /* =========================================================
+     初期化
+  ========================================================= */
+
+  document.addEventListener("DOMContentLoaded", () => {
+
+    loadMemories();
+
+    initializeRegisterDate();
+
+    renderMemoryList();
+
+  });
+
+
+  /* =========================================================
+     localStorage
+  ========================================================= */
+
+  function loadMemories() {
+
+    try {
+
+      const saved =
+        localStorage.getItem(STORAGE_KEY);
+
+      if (!saved) {
+
+        memories = [];
+
+        return;
+      }
+
+      const parsed =
+        JSON.parse(saved);
+
+      if (Array.isArray(parsed)) {
+
+        memories = parsed;
+
+      } else {
+
+        memories = [];
+
+      }
+
+    } catch (error) {
+
+      console.error(
+        "データ読み込みエラー:",
+        error
+      );
+
+      memories = [];
+
+    }
+
+  }
+
+
+  function saveMemoriesToStorage() {
+
+    try {
+
+      localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(memories)
+      );
+
+    } catch (error) {
+
+      console.error(
+        "データ保存エラー:",
+        error
+      );
+
+      alert(
+        "データの保存に失敗しました。"
+      );
+
+    }
+
+  }
+
+
+  /* =========================================================
+     画面切り替え
+  ========================================================= */
+
+  function showScreen(screenName) {
+
+    document
+      .querySelectorAll(".screen")
+      .forEach(screen => {
+
+        screen.classList.remove("active");
+
+      });
+
+
+    const screen =
+      document.getElementById(
+        screenName + "Screen"
+      );
+
+    if (screen) {
+
+      screen.classList.add("active");
+
+    }
+
+
+    /* ナビ */
+
+    document
+      .querySelectorAll(".nav-button")
+      .forEach(button => {
+
+        button.classList.remove("active");
+
+      });
+
+
+    if (screenName === "home") {
+
+      document
+        .getElementById("navHome")
+        .classList.add("active");
+
+      renderMemoryList();
+
+    }
+
+
+    if (screenName === "map") {
+
+      document
+        .getElementById("navMap")
+        .classList.add("active");
+
+      /*
+       * Leafletは非表示状態で初期化すると
+       * サイズ計算が壊れることがある。
+       *
+       * そのため画面を表示してから
+       * 地図を初期化する。
+       */
+
+      setTimeout(() => {
+
+        initializeMap();
+
+        if (map) {
+
+          map.invalidateSize(true);
+
+          renderMapMarkers();
+
+        }
+
+      }, 100);
+
+    }
+
+
+    if (screenName === "settings") {
+
+      document
+        .getElementById("navSettings")
+        .classList.add("active");
+
+    }
+
+  }
+
+
+  /* =========================================================
+     登録画面
+  ========================================================= */
+
+  function initializeRegisterDate() {
+
+    const input =
+      document.getElementById(
+        "dateInput"
+      );
+
+    const now =
+      new Date();
+
+    /*
+     * datetime-local用
+     */
+
+    const offset =
+      now.getTimezoneOffset();
+
+    const localDate =
+      new Date(
+        now.getTime() -
+        offset * 60 * 1000
+      );
+
+    input.value =
+      localDate
+        .toISOString()
+        .slice(0, 16);
+
+  }
+
+
+  /* =========================================================
+     評価
+  ========================================================= */
+
+  function setRating(rating) {
+
+    selectedRating = rating;
+
+    document
+      .getElementById(
+        "ratingInput"
+      )
+      .value = rating;
+
+    document
+      .querySelectorAll(
+        "#registerScreen .rating-star"
+      )
+      .forEach(star => {
+
+        const value =
+          Number(
+            star.dataset.rating
+          );
+
+        star.classList.toggle(
+          "active",
+          value <= rating
+        );
+
+      });
+
+  }
+
+
+  function createStars(rating) {
+
+    const safeRating =
+      Number(rating) || 0;
+
+    return "★".repeat(safeRating)
+      + "☆".repeat(5 - safeRating);
+
+  }
+
+
+  /* =========================================================
+     GPS
+  ========================================================= */
+
+  function getCurrentLocation() {
+
+    const status =
+      document.getElementById(
+        "gpsStatus"
+      );
+
+
+    if (!navigator.geolocation) {
+
+      status.innerHTML =
+        '<span class="gps-error">このブラウザでは位置情報を取得できません。</span>';
+
+      return;
+
+    }
+
+
+    status.textContent =
+      "📍 位置情報を取得しています…";
+
+
+    navigator.geolocation.getCurrentPosition(
+
+      position => {
+
+        const lat =
+          position.coords.latitude;
+
+        const lng =
+          position.coords.longitude;
+
+
+        document.getElementById(
+          "latitudeInput"
+        ).value = lat;
+
+
+        document.getElementById(
+          "longitudeInput"
+        ).value = lng;
+
+
+        status.innerHTML =
+          `
+          <span class="gps-success">
+            📍 位置情報あり
+          </span>
+          <br>
+          緯度: ${lat}
+          <br>
+          経度: ${lng}
+          `;
+
+      },
+
+
+      error => {
+
+        console.error(
+          "GPS Error:",
+          error
+        );
+
+
+        let message =
+          "位置情報を取得できませんでした。";
+
+
+        if (error.code === 1) {
+
+          message =
+            "位置情報の使用が許可されていません。";
+
+        }
+
+        if (error.code === 2) {
+
+          message =
+            "現在地を取得できませんでした。";
+
+        }
+
+        if (error.code === 3) {
+
+          message =
+            "位置情報の取得がタイムアウトしました。";
+
+        }
+
+
+        status.innerHTML =
+          `
+          <span class="gps-error">
+            ❌ ${message}
+          </span>
+          `;
+
+      },
+
+      {
+        enableHighAccuracy: true,
+        timeout: 15000,
+        maximumAge: 0
+      }
+
+    );
+
+  }
+
+
+  /* =========================================================
+     思い出保存
+  ========================================================= */
+
+  function saveMemory() {
+
+    const place =
+      document.getElementById(
+        "placeInput"
+      ).value.trim();
+
+
+    const rating =
+      Number(
+        document.getElementById(
+          "ratingInput"
+        ).value
+      );
+
+
+    const date =
+      document.getElementById(
+        "dateInput"
+      ).value;
+
+
+    const genre =
+      document.getElementById(
+        "genreInput"
+      ).value;
+
+
+    const priceValue =
+      document.getElementById(
+        "priceInput"
+      ).value;
+
+
+    const price =
+      priceValue
+        ? Number(priceValue)
+        : null;
+
+
+    const comment =
+      document.getElementById(
+        "commentInput"
+      ).value.trim();
+
+
+    const latitudeValue =
+      document.getElementById(
+        "latitudeInput"
+      ).value;
+
+
+    const longitudeValue =
+      document.getElementById(
+        "longitudeInput"
+      ).value;
+
+
+    const latitude =
+      latitudeValue !== ""
+        ? Number(latitudeValue)
+        : null;
+
+
+    const longitude =
+      longitudeValue !== ""
+        ? Number(longitudeValue)
+        : null;
+
+
+    /* 必須チェック */
+
+    if (!place) {
+
+      alert(
+        "場所を入力してください。"
+      );
+
+      return;
+
+    }
+
+
+    if (
+      !rating ||
+      rating < 1 ||
+      rating > 5
+    ) {
+
+      alert(
+        "評価を選択してください。"
+      );
+
+      return;
+
+    }
+
+
+    /* ID */
+
+    const memory = {
+
+      id:
+        Date.now().toString(),
+
+      place,
+
+      rating,
+
+      date,
+
+      genre,
+
+      price,
+
+      comment,
+
+      latitude:
+        Number.isFinite(latitude)
+          ? latitude
+          : null,
+
+      longitude:
+        Number.isFinite(longitude)
+          ? longitude
+          : null,
+
+      createdAt:
+        new Date().toISOString()
+
+    };
+
+
+    memories.unshift(memory);
+
+    saveMemoriesToStorage();
+
+
+    alert(
+      "思い出を保存しました！"
+    );
+
+
+    resetRegisterForm();
+
+    showScreen("home");
+
+  }
+
+
+  /* =========================================================
+     登録フォームリセット
+  ========================================================= */
+
+  function resetRegisterForm() {
+
+    document.getElementById(
+      "placeInput"
+    ).value = "";
+
+
+    document.getElementById(
+      "genreInput"
+    ).value = "";
+
+
+    document.getElementById(
+      "priceInput"
+    ).value = "";
+
+
+    document.getElementById(
+      "commentInput"
+    ).value = "";
+
+
+    document.getElementById(
+      "latitudeInput"
+    ).value = "";
+
+
+    document.getElementById(
+      "longitudeInput"
+    ).value = "";
+
+
+    selectedRating = 0;
+
+
+    document.getElementById(
+      "ratingInput"
+    ).value = "0";
+
+
+    document
+      .querySelectorAll(
+        "#registerScreen .rating-star"
+      )
+      .forEach(star => {
+
+        star.classList.remove(
+          "active"
+        );
+
+      });
+
+
+    document.getElementById(
+      "gpsStatus"
+    ).textContent =
+      "位置情報はまだ取得していません";
+
+
+    initializeRegisterDate();
+
+  }
+
+
+  /* =========================================================
+     一覧表示
+  ========================================================= */
+
+  function renderMemoryList() {
+
+    const container =
+      document.getElementById(
+        "memoryList"
+      );
+
+
+    const search =
+      document.getElementById(
+        "searchInput"
+      )
+        .value
+        .trim()
+        .toLowerCase();
+
+
+    let filtered =
+      memories.filter(memory => {
+
+        if (!search) {
+
+          return true;
+
+        }
+
+
+        const text =
+          [
+            memory.place,
+            memory.genre,
+            memory.comment
+          ]
+            .filter(Boolean)
+            .join(" ")
+            .toLowerCase();
+
+
+        return text.includes(search);
+
+      });
+
+
+    if (filtered.length === 0) {
+
+      container.innerHTML =
+        `
+        <div class="empty">
+          <div style="font-size:40px;">📷</div>
+          <p>
+            まだ思い出がありません
+          </p>
+        </div>
+        `;
+
+      return;
+
+    }
+
+
+    container.innerHTML =
+      filtered
+        .map(memory => {
+
+          const location =
+            hasLocation(memory)
+              ? `
+                <div class="memory-location">
+                  📍 位置情報あり
+                </div>
+              `
+              : "";
+
+
+          return `
+            <div
+              class="memory-item"
+              onclick="showDetail('${memory.id}')"
+            >
+
+              <h3>
+                ${escapeHtml(memory.place)}
+              </h3>
+
+              <div class="memory-meta">
+
+                <span class="stars">
+                  ${createStars(memory.rating)}
+                </span>
+
+                ${memory.genre
+                  ? " ・ " +
+                    escapeHtml(memory.genre)
+                  : ""}
+
+                ${memory.date
+                  ? " ・ " +
+                    formatDate(memory.date)
+                  : ""}
+
+              </div>
+
+              ${
+                memory.comment
+                  ? `
+                    <div class="memory-comment">
+                      ${escapeHtml(
+                        memory.comment
+                      )}
+                    </div>
+                  `
+                  : ""
+              }
+
+              ${location}
+
+            </div>
+          `;
+
+        })
+        .join("");
+
+  }
+
+
+  /* =========================================================
+     詳細
+  ========================================================= */
+
+  function showDetail(id) {
+
+    const memory =
+      memories.find(
+        item => item.id === id
+      );
+
+
+    if (!memory) {
+
+      return;
+
+    }
+
+
+    editingId = id;
+
+
+    const location =
+      hasLocation(memory)
+        ? `
+          <div class="detail-row">
+
+            <div class="detail-label">
+              位置情報
+            </div>
+
+            <div class="detail-value">
+              📍 位置情報あり
+              <br>
+              ${memory.latitude}
+              ,
+              ${memory.longitude}
+
+              <br><br>
+
+              <button
+                class="button button-secondary"
+                onclick="showLocationOnMap('${memory.id}')"
+              >
+                🗺 この場所をマップで見る
+              </button>
+
+            </div>
+
+          </div>
+        `
+        : `
+          <div class="detail-row">
+
+            <div class="detail-label">
+              位置情報
+            </div>
+
+            <div class="detail-value">
+              位置情報なし
+            </div>
+
+          </div>
+        `;
+
+
+    const price =
+      memory.price !== null &&
+      memory.price !== undefined
+        ? "¥" +
+          Number(memory.price)
+            .toLocaleString()
+        : "未登録";
+
+
+    document.getElementById(
+      "detailContent"
+    ).innerHTML =
+      `
+      <div class="card">
+
+        <h2 class="detail-title">
+          ${escapeHtml(memory.place)}
+        </h2>
+
+        <div class="stars" style="font-size:22px;">
+          ${createStars(memory.rating)}
+        </div>
+
+
+        <div class="detail-row">
+
+          <div class="detail-label">
+            日付
+          </div>
+
+          <div class="detail-value">
+            ${memory.date
+              ? formatDate(memory.date)
+              : "未登録"}
+          </div>
+
+        </div>
+
+
+        <div class="detail-row">
+
+          <div class="detail-label">
+            ジャンル
+          </div>
+
+          <div class="detail-value">
+            ${memory.genre
+              ? escapeHtml(memory.genre)
+              : "未登録"}
+          </div>
+
+        </div>
+
+
+        <div class="detail-row">
+
+          <div class="detail-label">
+            金額
+          </div>
+
+          <div class="detail-value">
+            ${price}
+          </div>
+
+        </div>
+
+
+        <div class="detail-row">
+
+          <div class="detail-label">
+            コメント
+          </div>
+
+          <div class="detail-value">
+            ${memory.comment
+              ? escapeHtml(memory.comment)
+              : "コメントなし"}
+          </div>
+
+        </div>
+
+
+        ${location}
+
+
+        <button
+          class="button button-primary"
+          onclick="openEdit('${memory.id}')"
+        >
+          編集する
+        </button>
+
+
+        <button
+          class="button button-danger"
+          onclick="deleteMemory('${memory.id}')"
+        >
+          削除する
+        </button>
+
+      </div>
+      `;
+
+
+    showScreen("detail");
+
+  }
+
+
+  /* =========================================================
+     編集
+  ========================================================= */
+
+  function openEdit(id) {
+
+    const memory =
+      memories.find(
+        item => item.id === id
+      );
+
+
+    if (!memory) {
+
+      return;
+
+    }
+
+
+    editingId = id;
+
+
+    document.getElementById(
+      "editPlaceInput"
+    ).value =
+      memory.place || "";
+
+
+    document.getElementById(
+      "editDateInput"
+    ).value =
+      memory.date || "";
+
+
+    document.getElementById(
+      "editGenreInput"
+    ).value =
+      memory.genre || "";
+
+
+    document.getElementById(
+      "editPriceInput"
+    ).value =
+      memory.price ?? "";
+
+
+    document.getElementById(
+      "editCommentInput"
+    ).value =
+      memory.comment || "";
+
+
+    setEditRating(
+      Number(memory.rating) || 0
+    );
+
+
+    showScreen("edit");
+
+  }
+
+
+  function setEditRating(rating) {
+
+    document.getElementById(
+      "editRatingInput"
+    ).value = rating;
+
+
+    const container =
+      document.getElementById(
+        "editRatingStars"
+      );
+
+
+    container.innerHTML = "";
+
+
+    for (
+      let i = 1;
+      i <= 5;
+      i++
+    ) {
+
+      const button =
+        document.createElement(
+          "button"
+        );
+
+
+      button.type = "button";
+
+      button.className =
+        "rating-star" +
+        (
+          i <= rating
+            ? " active"
+            : ""
+        );
+
+      button.textContent = "★";
+
+      button.onclick = () =>
+        setEditRating(i);
+
+
+      container.appendChild(
+        button
+      );
+
+    }
+
+  }
+
+
+  function updateMemory() {
+
+    const memory =
+      memories.find(
+        item => item.id === editingId
+      );
+
+
+    if (!memory) {
+
+      return;
+
+    }
+
+
+    const place =
+      document.getElementById(
+        "editPlaceInput"
+      ).value.trim();
+
+
+    if (!place) {
+
+      alert(
+        "場所を入力してください。"
+      );
+
+      return;
+
+    }
+
+
+    memory.place =
+      place;
+
+
+    memory.rating =
+      Number(
+        document.getElementById(
+          "editRatingInput"
+        ).value
+      );
+
+
+    memory.date =
+      document.getElementById(
+        "editDateInput"
+      ).value;
+
+
+    memory.genre =
+      document.getElementById(
+        "editGenreInput"
+      ).value;
+
+
+    const price =
+      document.getElementById(
+        "editPriceInput"
+      ).value;
+
+
+    memory.price =
+      price
+        ? Number(price)
+        : null;
+
+
+    memory.comment =
+      document.getElementById(
+        "editCommentInput"
+      ).value.trim();
+
+
+    saveMemoriesToStorage();
+
+
+    alert(
+      "変更を保存しました。"
+    );
+
+
+    showDetail(editingId);
+
+  }
+
+
+  /* =========================================================
+     削除
+  ========================================================= */
+
+  function deleteMemory(id) {
+
+    const memory =
+      memories.find(
+        item => item.id === id
+      );
+
+
+    if (!memory) {
+
+      return;
+
+    }
+
+
+    const confirmed =
+      confirm(
+        `「${memory.place}」を削除しますか？`
+      );
+
+
+    if (!confirmed) {
+
+      return;
+
+    }
+
+
+    memories =
+      memories.filter(
+        item => item.id !== id
+      );
+
+
+    saveMemoriesToStorage();
+
+
+    editingId = null;
+
+
+    alert(
+      "削除しました。"
+    );
+
+
+    showScreen("home");
+
+  }
+
+
+  /* =========================================================
+     地図初期化
+  ========================================================= */
+
+  function initializeMap() {
+
+    const mapElement =
+      document.getElementById(
+        "map"
+      );
+
+
+    if (!mapElement) {
+
+      return;
+
+    }
+
+
+    /*
+     * すでに地図が存在する場合
+     */
+
+    if (map) {
+
+      setTimeout(() => {
+
+        map.invalidateSize(true);
+
+        renderMapMarkers();
+
+      }, 100);
+
+      return;
+
+    }
+
+
+    /*
+     * Leaflet初期化
+     */
+
+    map =
+      L.map(
+        mapElement,
+        {
+          zoomControl: true
+        }
+      )
+        .setView(
+          [36.2048, 138.2529],
+          5
+        );
+
+
+    /*
+     * OpenStreetMap
+     */
+
+    L.tileLayer(
+
+      "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+
+      {
+
+        maxZoom: 19,
+
+        attribution:
+          '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a> contributors'
+
+      }
+
+    ).addTo(map);
+
+
+    /*
+     * 初回描画
+     */
+
+    setTimeout(() => {
+
+      map.invalidateSize(true);
+
+      renderMapMarkers();
+
+    }, 300);
+
+  }
+
+
+  /* =========================================================
+     位置情報チェック
+  ========================================================= */
+
+  function hasLocation(memory) {
+
+    const lat =
+      Number(memory.latitude);
+
+    const lng =
+      Number(memory.longitude);
+
+
+    return (
+      Number.isFinite(lat) &&
+      Number.isFinite(lng) &&
+      lat >= -90 &&
+      lat <= 90 &&
+      lng >= -180 &&
+      lng <= 180
+    );
+
+  }
+
+
+  /* =========================================================
+     地図ピン描画
+  ========================================================= */
+
+  function renderMapMarkers() {
+
+    if (!map) {
+
+      return;
+
+    }
+
+
+    /*
+     * 既存ピン削除
+     */
+
+    markers.forEach(marker => {
+
+      map.removeLayer(marker);
+
+    });
+
+
+    markers = [];
+
+
+    /*
+     * 位置情報を持っている思い出だけ
+     */
+
+    const locatedMemories =
+      memories.filter(
+        memory =>
+          hasLocation(memory)
+      );
+
+
+    const mapStatus =
+      document.getElementById(
+        "mapStatus"
+      );
+
+
+    if (
+      locatedMemories.length === 0
+    ) {
+
+      mapStatus.textContent =
+        "位置情報のある思い出がありません。";
+
+      return;
+
+    }
+
+
+    mapStatus.textContent =
+      `📍 ${locatedMemories.length}件の思い出を表示中`;
+
+
+    /*
+     * 全ピン作成
+     */
+
+    const bounds = [];
+
+
+    locatedMemories.forEach(
+      memory => {
+
+        const lat =
+          Number(memory.latitude);
+
+        const lng =
+          Number(memory.longitude);
+
+
+        const marker =
+          L.marker(
+            [lat, lng]
+          )
+            .addTo(map);
+
+
+        marker.bindPopup(
+          `
+          <div style="min-width:180px;">
+
+            <strong style="font-size:16px;">
+              ${escapeHtml(
+                memory.place
+              )}
+            </strong>
+
+            <br>
+
+            <span style="color:#f4b400;">
+              ${createStars(
+                memory.rating
+              )}
+            </span>
+
+            ${
+              memory.genre
+                ? `
+                  <br>
+                  ${escapeHtml(
+                    memory.genre
+                  )}
+                `
+                : ""
+            }
+
+            ${
+              memory.date
+                ? `
+                  <br>
+                  ${formatDate(
+                    memory.date
+                  )}
+                `
+                : ""
+            }
+
+            <br><br>
+
+            <button
+              onclick="showDetailFromPopup('${memory.id}')"
+              style="
+                border:none;
+                background:#222;
+                color:#fff;
+                padding:8px 12px;
+                border-radius:8px;
+              "
+            >
+              詳細を見る
+            </button>
+
+          </div>
+          `
+        );
+
+
+        markers.push(marker);
+
+        bounds.push(
+          [lat, lng]
+        );
+
+      }
+    );
+
+
+    /*
+     * ピンが1つならその場所へ
+     */
+
+    if (
+      bounds.length === 1
+    ) {
+
+      map.setView(
+        bounds[0],
+        15
+      );
+
+      return;
+
+    }
+
+
+    /*
+     * 複数なら全ピンが見えるようにする
+     */
+
+    if (
+      bounds.length > 1
+    ) {
+
+      map.fitBounds(
+        bounds,
+        {
+          padding: [
+            40,
+            40
+          ],
+          maxZoom: 15
+        }
+      );
+
+    }
+
+  }
+
+
+  /* =========================================================
+     全ピン表示
+  ========================================================= */
+
+  function fitAllMarkers() {
+
+    if (!map) {
+
+      return;
+
+    }
+
+
+    renderMapMarkers();
+
+  }
+
+
+  /* =========================================================
+     現在地を地図で表示
+  ========================================================= */
+
+  function moveMapToCurrentLocation() {
+
+    if (!navigator.geolocation) {
+
+      alert(
+        "このブラウザでは位置情報を取得できません。"
+      );
+
+      return;
+
+    }
+
+
+    navigator.geolocation.getCurrentPosition(
+
+      position => {
+
+        const lat =
+          position.coords.latitude;
+
+        const lng =
+          position.coords.longitude;
+
+
+        if (!map) {
+
+          initializeMap();
+
+        }
+
+
+        setTimeout(() => {
+
+          map.invalidateSize(true);
+
+          map.setView(
+            [lat, lng],
+            16
+          );
+
+
+          /*
+           * 既存の現在地マーカーを削除
+           */
+
+          if (
+            currentLocationMarker
+          ) {
+
+            map.removeLayer(
+              currentLocationMarker
+            );
+
+          }
+
+
+          currentLocationMarker =
+            L.circleMarker(
+              [lat, lng],
+              {
+                radius: 8
+              }
+            )
+              .addTo(map)
+              .bindPopup(
+                "現在地"
+              );
+
+
+          currentLocationMarker.openPopup();
+
+        }, 100);
+
+      },
+
+
+      error => {
+
+        alert(
+          "現在地を取得できませんでした。"
+        );
+
+        console.error(
+          error
+        );
+
+      },
+
+      {
+        enableHighAccuracy: true,
+        timeout: 15000,
+        maximumAge: 0
+      }
+
+    );
+
+  }
+
+
+  /* =========================================================
+     特定の思い出を地図で表示
+  ========================================================= */
+
+  function showLocationOnMap(id) {
+
+    const memory =
+      memories.find(
+        item => item.id === id
+      );
+
+
+    if (
+      !memory ||
+      !hasLocation(memory)
+    ) {
+
+      alert(
+        "この思い出には位置情報がありません。"
+      );
+
+      return;
+
+    }
+
+
+    showScreen("map");
+
+
+    setTimeout(() => {
+
+      if (!map) {
+
+        initializeMap();
+
+      }
+
+
+      setTimeout(() => {
+
+        map.invalidateSize(true);
+
+
+        const lat =
+          Number(memory.latitude);
+
+        const lng =
+          Number(memory.longitude);
+
+
+        map.setView(
+          [lat, lng],
+          16
+        );
+
+
+        /*
+         * 該当ピンを探して開く
+         */
+
+        const index =
+          memories
+            .filter(
+              item =>
+                hasLocation(item)
+            )
+            .findIndex(
+              item =>
+                item.id === memory.id
+            );
+
+
+        if (
+          index >= 0 &&
+          markers[index]
+        ) {
+
+          markers[index].openPopup();
+
+        }
+
+      }, 200);
+
+    }, 200);
+
+  }
+
+
+  function showDetailFromPopup(id) {
+
+    showDetail(id);
+
+  }
+
+
+  /* =========================================================
+     日付表示
+  ========================================================= */
+
+  function formatDate(value) {
+
+    if (!value) {
+
+      return "";
+
+    }
+
+
+    const date =
+      new Date(value);
+
+
+    if (
+      Number.isNaN(
+        date.getTime()
+      )
+    ) {
+
+      return value;
+
+    }
+
+
+    return date.toLocaleString(
+      "ja-JP",
+      {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit"
+      }
+    );
+
+  }
+
+
+  /* =========================================================
+     HTMLエスケープ
+  ========================================================= */
+
+  function escapeHtml(value) {
+
+    if (
+      value === null ||
+      value === undefined
+    ) {
+
+      return "";
+
+    }
+
+
+    return String(value)
+      .replace(
+        /&/g,
+        "&amp;"
+      )
+      .replace(
+        /</g,
+        "&lt;"
+      )
+      .replace(
+        />/g,
+        "&gt;"
+      )
+      .replace(
+        /"/g,
+        "&quot;"
+      )
+      .replace(
+        /'/g,
+        "&#039;"
+      );
+
+  }
+
+</script>
+
+</body>
+</html>
